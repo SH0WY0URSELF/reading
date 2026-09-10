@@ -913,6 +913,7 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
   var groups = document.querySelectorAll('.nav-group');
   function show(id, noScroll, animate){
     if(animate === undefined) animate = true;
+    window.__shownId = id;
     sections.forEach(function(s){ s.style.display = (s.id === id ? 'block' : 'none'); });
     links.forEach(function(a){
       a.classList.toggle('active', a.getAttribute('data-target') === id);
@@ -952,9 +953,9 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
           setTimeout(function(){ t.classList.add('show'); }, 120 + i * 55);
         });
       } else {
-        // 首屏：直接就位，不播放入场动画（preload 已禁用过渡，避免空白→填满的一闪）
-        cur.querySelectorAll('.core').forEach(function(el){ el.classList.add('reveal-in'); });
-        cur.querySelectorAll('.pain-tags .pain-tag').forEach(function(t){ t.classList.add('show'); });
+        // 首屏：这里【不】直接加 reveal-in —— 内容先保持透明（.core / .pain-tag 默认 opacity:0），
+        // 等 preload 移除、过渡恢复后，在下面的 rAF 里统一淡入。
+        // 目的：跨页进入的观感与页内切换一致（用户反馈「跨页不如页内丝滑」）。
       }
     }
   }
@@ -996,12 +997,28 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
   //
   // 兜底：任何延迟到来的滚动都拉回顶部（此时用户还没开始交互，安全）
   window.addEventListener('load', function(){ try{ window.scrollTo(0, 0); }catch(e){} });
-  // 首屏渲染完成后再启用过渡/动画，让后续切换的入场动画正常播放
+  // 首屏渲染完成后再启用过渡/动画；趁这一刻让首屏内容淡入，观感与页内切换一致
+  function revealFirst(){
+    var cur = document.getElementById(window.__shownId);
+    if(!cur) return;
+    cur.querySelectorAll('.core').forEach(function(el, i){
+      setTimeout(function(){ el.classList.add('reveal-in'); }, 30 + i * 70);
+    });
+    cur.querySelectorAll('.pain-tags .pain-tag').forEach(function(t, i){
+      setTimeout(function(){ t.classList.add('show'); }, 60 + i * 45);
+    });
+  }
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){
       document.documentElement.classList.remove('preload');
+      revealFirst();
     });
   });
+  // 兜底：万一 rAF 没跑到，800ms 后强制显示，绝不让内容一直透明
+  setTimeout(function(){
+    var cur = document.getElementById(window.__shownId);
+    if(cur && cur.querySelector('.core:not(.reveal-in)')) revealFirst();
+  }, 800);
   window.showProblem = show;
 })();
 
