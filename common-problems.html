@@ -5,6 +5,20 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>document.documentElement.classList.add('preload');</script>
+<script>
+(function(){
+  // 1) 禁用浏览器「滚动位置恢复」：跨页导航会先恢复上一页滚动位置 → 视觉「跳一下」
+  if("scrollRestoration" in history){ try{ history.scrollRestoration = "manual"; }catch(e){} }
+  // 2) 摘掉 hash（内容未就绪时按锚点滚动会跳），暂存到 __savedHash 供 show() 后恢复
+  var h = location.hash;
+  if(h){
+    try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+    window.__savedHash = h;
+  }
+  // 3) 确保从顶部开始
+  try{ window.scrollTo(0, 0); }catch(e){}
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>成长觉醒</title>
@@ -184,22 +198,6 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
 <link rel="stylesheet" href="assets/free-lock.css?v=7">
 </head>
 <body>
-<script>
-// 1) 阻止浏览器默认 hash 滚动（目标元素初始 display:none，浏览器会滚动到错误位置）。
-//    加载前临时去掉 hash，show() 执行后再恢复，让内容从顶栏下方顶头显示。
-// 2) 禁用浏览器「滚动位置恢复」：跨页导航（如从 growth-stages 点分类跳过来）时，
-//    浏览器会先恢复到上一页的滚动位置，随后被 show() 拉回顶部 —— 视觉上就是「跳一下」。
-//    设 manual 后新页面一律从顶部开始，不再出现这次跳动。
-(function(){
-  if("scrollRestoration" in history){ try{ history.scrollRestoration = "manual"; }catch(e){} }
-  var h = location.hash;
-  if(h){
-    history.replaceState(null, '', location.pathname + location.search);
-    window.__savedHash = h;
-  }
-  try{ window.scrollTo(0, 0); }catch(e){}
-})();
-</script>
 
 <!-- 手绘抖动滤镜 + 箭头 marker（白板风「怎么解决」共用） -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -987,19 +985,17 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
     }
   }
   // 首屏不播放入场动画（animate=false），避免「空白→填满」闪一下；preload 已禁用过渡
-  // noScroll=true：hash 已在 body 开头脚本里移除、且 scrollRestoration=manual，
+  // noScroll=true：hash 已在 <head> 早期脚本里移除、且 scrollRestoration=manual，
   // 页面本身就停在顶部；这里若再 setTimeout(scrollTo) 会在布局稳定前造成二次跳动。
   show(document.getElementById(hash) ? hash : first, true, false);
-  // 页面加载并 show() 完成后再恢复 hash，避免浏览器默认 hash 滚动覆盖 scrollTo(0,0)
-  if(window.__savedHash){
-    setTimeout(function(){
-      var h = window.__savedHash.replace('#','');
-      var link = document.querySelector('.side-nav-problems a[data-target="' + h + '"]');
-      if(link && !link.classList.contains('problem-locked') && !link.classList.contains('free-locked')){
-        history.replaceState(null, '', window.__savedHash);
-      }
-    }, 120);
-  }
+  // ⚠️ 绝对不要把 hash 写回 URL（下面这段是历史坑，勿恢复）：
+  // 实测 2026-09-10 —— 只要 URL 的 fragment 变成 #p-xxx，浏览器就会把该锚点滚到视口顶部
+  // （页面因此上移约 88px ≈ 顶栏高度 + 间距），用户看到的就是「进页面时跳一下」。
+  // 同步 replaceState 和延迟 120ms 都躲不掉（fragment 一变就会排队滚动），所以干脆不写回：
+  // 内容定位靠 __savedHash，URL 保持干净。
+  //
+  // 兜底：任何延迟到来的滚动都拉回顶部（此时用户还没开始交互，安全）
+  window.addEventListener('load', function(){ try{ window.scrollTo(0, 0); }catch(e){} });
   // 首屏渲染完成后再启用过渡/动画，让后续切换的入场动画正常播放
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){
