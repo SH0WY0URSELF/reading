@@ -185,14 +185,19 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
 </head>
 <body>
 <script>
-// 阻止浏览器默认 hash 滚动（目标元素初始 display:none，浏览器会滚动到错误位置）。
-// 加载前临时去掉 hash，show() 执行后再恢复，让内容从顶栏下方顶头显示。
+// 1) 阻止浏览器默认 hash 滚动（目标元素初始 display:none，浏览器会滚动到错误位置）。
+//    加载前临时去掉 hash，show() 执行后再恢复，让内容从顶栏下方顶头显示。
+// 2) 禁用浏览器「滚动位置恢复」：跨页导航（如从 growth-stages 点分类跳过来）时，
+//    浏览器会先恢复到上一页的滚动位置，随后被 show() 拉回顶部 —— 视觉上就是「跳一下」。
+//    设 manual 后新页面一律从顶部开始，不再出现这次跳动。
 (function(){
+  if("scrollRestoration" in history){ try{ history.scrollRestoration = "manual"; }catch(e){} }
   var h = location.hash;
   if(h){
     history.replaceState(null, '', location.pathname + location.search);
     window.__savedHash = h;
   }
+  try{ window.scrollTo(0, 0); }catch(e){}
 })();
 </script>
 
@@ -982,7 +987,9 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
     }
   }
   // 首屏不播放入场动画（animate=false），避免「空白→填满」闪一下；preload 已禁用过渡
-  show(document.getElementById(hash) ? hash : first, false, false);
+  // noScroll=true：hash 已在 body 开头脚本里移除、且 scrollRestoration=manual，
+  // 页面本身就停在顶部；这里若再 setTimeout(scrollTo) 会在布局稳定前造成二次跳动。
+  show(document.getElementById(hash) ? hash : first, true, false);
   // 页面加载并 show() 完成后再恢复 hash，避免浏览器默认 hash 滚动覆盖 scrollTo(0,0)
   if(window.__savedHash){
     setTimeout(function(){
