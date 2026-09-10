@@ -147,11 +147,11 @@
 
   <!-- 顶部 tab 导航 -->
   <nav class="tabs" id="tabs">
-    <a href="#s1" class="tab active">① 书籍定位</a>
-    <a href="#s2" class="tab">② 核心误区</a>
-    <a href="#s3" class="tab">③ 孙武破局</a>
-    <a href="#s4" class="tab">④ 核心内容</a>
-    <a href="#s5" class="tab">⑤ 核心价值</a>
+    <a class="tab active" data-target="s1" tabindex="0" role="button">① 书籍定位</a>
+    <a class="tab" data-target="s2" tabindex="0" role="button">② 核心误区</a>
+    <a class="tab" data-target="s3" tabindex="0" role="button">③ 孙武破局</a>
+    <a class="tab" data-target="s4" tabindex="0" role="button">④ 核心内容</a>
+    <a class="tab" data-target="s5" tabindex="0" role="button">⑤ 核心价值</a>
   </nav>
 
   <!-- 一、书籍定位 -->
@@ -399,7 +399,7 @@
 
 <script>
   var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
-  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  var sections=tabs.map(function(t){return document.querySelector('#'+t.dataset.target);}).filter(Boolean);
   var spy=new IntersectionObserver(function(entries){
     var best=null,bestRatio=-1;
     entries.forEach(function(e){
@@ -407,12 +407,286 @@
     });
     if(best){
       var id='#'+best.id;
-      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+      tabs.forEach(function(t){t.classList.toggle('active', '#'+t.dataset.target===id);});
     }
   },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]});
+  
+  // tab 点击/键盘平滑滚动（去 href 防暴露文件路径）
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var sec=document.querySelector('#'+t.dataset.target);
+      if(sec){sec.scrollIntoView({behavior:'smooth',block:'start'});}
+    });
+    t.addEventListener('keydown', function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();t.click();}
+    });
+  });
   sections.forEach(function(s){spy.observe(s);});
 
   // 内容块默认已可见（CSS .rise opacity:1），不再用 IntersectionObserver 控制显隐，避免滚动时出现空白断层。
+</script>
+<!-- vTTS · 自定义播放器 v8（2026-09-08）
+       加回"默认收起"——在 v7 长方形胶囊布局基础上，加折叠：
+       · 默认 width:44px，只露出 ▶ 红色圆按钮（位置在容器最右侧，永远不动）
+       · hover 容器 → width 展开 44→320px，左侧 .ap-controls 区从 max-width:0 滑出进度条+控件+按钮
+       · mouseleave → 延时 1500ms 收起（让用户有时间点菜单）
+       · scroll/wheel/touchmove → 立即收起（不影响音频播放）
+       · ▶ 单击任何时候都有效；点击时若收起则强制展开
+       · 保留：5 音色 + 切音色无缝续播（wasPlaying 锁定）+ 15秒单箭头简洁设计 -->
+  <!-- v12 · ▶ 嵌在胶囊最右端，跟胶囊完全一体（红边框药片） -->
+  <div id="apPlayer" class="ap-player">
+    <!-- 折叠内容：默认 width:0 折叠在 ▶ 左侧，hover 时撑开 -->
+    <div class="ap-content" id="apContent">
+      <div class="ap-top">
+        <span class="ap-time-cur" id="apCur">00:00</span>
+        <div class="ap-progress" id="apProgress"><div class="ap-bar" id="apBar"></div></div>
+        <span class="ap-time-dur" id="apDur">--:--</span>
+      </div>
+      <div class="ap-bottom">
+        <button class="ap-pill" id="apSpeed" type="button">1.0x</button>
+        <button class="ap-jump" id="apBack" type="button" title="后退15秒" aria-label="后退15秒">
+          <span class="ap-num">15</span><span class="ap-glyph">↺</span>
+        </button>
+        <button class="ap-jump" id="apFwd" type="button" title="前进15秒" aria-label="前进15秒">
+          <span class="ap-glyph">↻</span><span class="ap-num">15</span>
+        </button>
+        <button class="ap-pill" id="apVoice" type="button">云希</button>
+      </div>
+      <div class="ap-menu" id="apSpeedMenu" hidden>
+        <div class="ap-opt" data-v="0.75">0.75x</div>
+        <div class="ap-opt" data-v="1">1.0x</div>
+        <div class="ap-opt" data-v="1.25">1.25x</div>
+        <div class="ap-opt" data-v="1.5">1.5x</div>
+        <div class="ap-opt" data-v="2">2.0x</div>
+      </div>
+      <div class="ap-menu" id="apVoiceMenu" hidden>
+        <div class="ap-opt" data-f="孙子兵法_yunxi.mp3" data-n="云希">云希 · 男</div>
+        <div class="ap-opt" data-f="孙子兵法_xiaoxiao.mp3" data-n="晓晓">晓晓 · 女</div>
+        <div class="ap-opt" data-f="孙子兵法_xiaoyi.mp3" data-n="晓伊">晓伊 · 新闻</div>
+        <div class="ap-opt" data-f="孙子兵法_yunxia.mp3" data-n="云夏">云夏 · 温柔</div>
+        <div class="ap-opt" data-f="孙子兵法_yunjian.mp3" data-n="云健">云健 · 男</div>
+      </div>
+    </div>
+    <!-- ▶ / ⏸ —— 独立固定，永远在面板右侧垂直居中、位置不动 -->
+    <button class="ap-play" id="apPlay" type="button" aria-label="播放/暂停">
+      <span class="ap-icon-play" aria-hidden="true"></span>
+      <span class="ap-icon-pause" aria-hidden="true"></span>
+    </button>
+  </div>
+  <style>
+    /* v12 · ▶ 嵌在胶囊最右端，跟胶囊完全一体（一个红边框药片） */
+    /* v13 · 默认态=孤立 ▶（无边框无圆环），hover态=胶囊从 ▶ 左侧撑出显现 + ▶ 嵌胶囊最右端 border 内 */
+    /* v15.1 · ▶ 距右 8px + 上下多 22px 间距 + ▶ 距左内容 28px + 底部紧凑（gap 6）+ 顶部紧凑（gap 8）+ 进度条 110px */
+    .ap-player{position:fixed;top:80px;right:32px;display:flex;align-items:center;justify-content:flex-start;height:92px;width:48px;background:transparent;border:1.5px solid transparent;border-radius:14px;box-shadow:none;padding:0;overflow:visible;z-index:9999;font-family:var(--font-hand),sans-serif;-webkit-font-smoothing:antialiased;transition:width .36s cubic-bezier(.22,1,.36,1),background .3s,border-color .3s,box-shadow .3s,padding-left .36s cubic-bezier(.22,1,.36,1),padding-right .36s cubic-bezier(.22,1,.36,1),height .36s cubic-bezier(.22,1,.36,1)}
+
+    /* v35 · 展开态：padding-left=14, padding-right=14, panel.width=256, justify-content:space-between → 1.0x 离左 = 15, 24:51 离 ▶ 圆 = 15, progress 弹性两端 gap=5 */
+    .ap-player.is-open{width:256px;height:92px;background:#fff;border:1.5px solid var(--accent,#E0432E);box-shadow:0 8px 22px rgba(224,67,46,.20);padding-left:14px;padding-right:14px;justify-content:space-between}
+
+    /* v32 · 折叠内容：默认 width:0 + max-width:0 + opacity:0 + 无 padding，hover 时撑开为 auto（让 panel 内 space-between 自然撑两端，ap-content 不再固定 196） */
+    .ap-content{display:flex;flex-direction:column;justify-content:center;gap:5px;width:0;max-width:0;height:92px;overflow:hidden;opacity:0;padding:0;flex:0 0 auto;box-sizing:border-box;transition:width .36s cubic-bezier(.22,1,.36,1),max-width .36s cubic-bezier(.22,1,.36,1),opacity .25s}
+    .ap-player.is-open .ap-content{width:auto;max-width:none;opacity:1}
+
+    /* ▶ 圆按钮：胶囊最右端垂直居中、永远不动。space-between 已推右，不需 margin-left:auto */
+    .ap-play{flex-shrink:0;width:48px;height:48px;border-radius:50%;border:none;background:var(--accent,#E0432E);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(224,67,46,.4);padding:0;transition:transform .12s}
+    .ap-play:active{transform:scale(.94)}
+    .ap-play .ap-icon-play{display:block;width:0;height:0;border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent #fff;margin-left:3px}
+    .ap-play .ap-icon-pause{display:none;width:14px;height:15px;position:relative}
+    .ap-play .ap-icon-pause::before,.ap-play .ap-icon-pause::after{content:"";position:absolute;top:0;width:5px;height:15px;background:#fff;border-radius:1px}
+    .ap-play .ap-icon-pause::before{left:0}
+    .ap-play .ap-icon-pause::after{right:0}
+    .ap-play.is-playing .ap-icon-play{display:none}
+    .ap-play.is-playing .ap-icon-pause{display:block}
+
+    /* 第1行：当前时间(左，贴左) | 进度条(紧跟 00:00 gap 5) | 总时长(右，margin-left:auto 推右紧贴 ▶ 圆) —— 让 25:05 跟 ▶ 圆距离 = panel padding-right 12px */
+    /* v35 · 进度条弹性占满中间：cur/prog/dur 三个 flex 子项，prog flex:1 撑满剩余，cur.right→prog.left=5, prog.right→dur.left=5 两端对称 */
+    .ap-top{display:flex;align-items:center;gap:5px}
+    .ap-time-cur,.ap-time-dur{font-size:11px;color:#B5321F;font-weight:600;font-variant-numeric:tabular-nums;opacity:.78;white-space:nowrap;line-height:1;flex-shrink:0}
+    .ap-time-cur{text-align:left}
+    .ap-time-dur{text-align:right}
+    /* v35 · progress 用 flex:1 撑满中间空隙（不再固定 80px + dur margin-left:auto）*/
+    .ap-progress{flex:1 1 auto;min-width:60px;height:4px;background:#f3e1de;border-radius:2px;cursor:pointer}
+    .ap-bar{height:100%;width:0;background:var(--accent,#E0432E);border-radius:2px;transition:width .12s linear}
+
+    /* 控件行（第2行）：1.0x / ‹15 / 15› / 云希，间距 10px 紧凑 */
+    .ap-bottom{display:flex;align-items:center;gap:3px}
+    .ap-pill{font-size:12.5px;color:#B5321F;background:#FCEAE6;border:none;border-radius:14px;padding:3px 7px;cursor:pointer;font-family:inherit;white-space:nowrap;line-height:1.2;transition:transform .12s,background .12s}
+    .ap-pill:hover{background:#fbd9d3}
+    .ap-pill:active{transform:scale(.96)}
+    .ap-jump{position:relative;width:auto;height:32px;border:none;background:transparent;color:var(--accent,#E0432E);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:1px;padding:0 6px;transition:background .12s,transform .12s;flex-shrink:0;border-radius:16px;white-space:nowrap}
+    .ap-jump:hover{background:#FCEAE6}
+    .ap-jump:active{transform:scale(.92)}
+    .ap-jump .ap-num{position:static;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;font-family:inherit;line-height:1;pointer-events:none}
+    /* v35 · 15秒 ↺/↻ 字符放大 16→19px 让箭头更清晰，加 font-weight 700 描粗 */
+    .ap-jump .ap-glyph{position:static;font-size:19px;font-weight:700;line-height:1;pointer-events:none;font-family:"Apple Symbols","Segoe UI Symbol","Symbola","DejaVu Sans","Noto Sans Symbols2",sans-serif}
+
+    /* 菜单：倍速左下、音色右下（相对面板定位） */
+    .ap-menu{position:absolute;top:calc(100% + 8px);background:#fff;border:1px solid #f0d9d4;border-radius:10px;box-shadow:0 8px 22px rgba(0,0,0,.14);padding:4px;min-width:96px;z-index:10003;max-height:240px;overflow-y:auto}
+    .ap-menu[hidden]{display:none}
+    #apSpeedMenu{left:14px;right:auto}
+    #apVoiceMenu{right:14px;left:auto}
+    .ap-opt{padding:7px 11px;font-size:12.5px;color:#333;border-radius:7px;cursor:pointer;white-space:nowrap;line-height:1.3}
+    .ap-opt:hover{background:#FCEAE6}
+    .ap-opt.active{color:#B5321F;font-weight:700;background:#FCEAE6}
+  </style>
+  </style>
+<script>
+  (function(){
+    /* v8 · 默认收起：仅 ▶ 可见在右上角；hover 容器展开完整面板（▶ 位置永远不动）；
+       5 个有效音色 + 切音色无缝续播（wasPlaying 锁定）+ 倍速 + 15秒 + 进度跳转 */
+    var VOICES=[
+      {f:'孙子兵法_yunxi.mp3',n:'云希'},
+      {f:'孙子兵法_xiaoxiao.mp3',n:'晓晓'},
+      {f:'孙子兵法_xiaoyi.mp3',n:'晓伊'},
+      {f:'孙子兵法_yunxia.mp3',n:'云夏'},
+      {f:'孙子兵法_yunjian.mp3',n:'云健'},
+    ];
+    var cur=0, rate=1;
+    var audio=new Audio();
+    audio.preload='metadata';
+    audio.src=VOICES[cur].f;
+
+    var player=document.getElementById('apPlayer');
+    var bar=document.getElementById('apBar');
+    var curT=document.getElementById('apCur');
+    var durT=document.getElementById('apDur');
+    var playBtn=document.getElementById('apPlay');
+    var speedBtn=document.getElementById('apSpeed');
+    var voiceBtn=document.getElementById('apVoice');
+    var speedMenu=document.getElementById('apSpeedMenu');
+    var voiceMenu=document.getElementById('apVoiceMenu');
+    var progress=document.getElementById('apProgress');
+
+    function fmt(s){ s=Math.max(0,Math.floor(s||0)); var m=Math.floor(s/60); return (m<10?'0':'')+m+':'+(s%60<10?'0':'')+(s%60); }
+    function tick(){
+      var pct=audio.duration?audio.currentTime/audio.duration*100:0;
+      bar.style.width=pct+'%';
+      curT.textContent=fmt(audio.currentTime);
+      if(audio.duration && !isNaN(audio.duration)) durT.textContent=fmt(audio.duration);
+    }
+    audio.ontimeupdate=tick;
+    audio.onloadedmetadata=tick;
+
+    function syncPlayState(){ playBtn.classList.toggle('is-playing', !audio.paused); }
+    audio.onplay=syncPlayState;
+    audio.onpause=syncPlayState;
+    audio.onended=function(){ syncPlayState(); };
+
+    playBtn.onclick=function(){
+      forceExpand();
+      if(audio.paused){
+        var p=audio.play();
+        if(p && p.then){ p.then(syncPlayState).catch(function(){}); } else syncPlayState();
+      } else {
+        audio.pause();
+        syncPlayState();
+      }
+    };
+
+    progress.onclick=function(e){
+      var r=this.getBoundingClientRect();
+      var x=(e.clientX-r.left)/r.width;
+      if(audio.duration){ audio.currentTime=Math.max(0,Math.min(audio.duration,x*audio.duration)); }
+    };
+
+    document.getElementById('apBack').onclick=function(){ audio.currentTime=Math.max(0,(audio.currentTime||0)-15); };
+    document.getElementById('apFwd').onclick=function(){
+      var ct=(audio.currentTime||0)+15;
+      audio.currentTime=Math.min(audio.duration||ct,ct);
+    };
+
+    speedBtn.onclick=function(e){ e.stopPropagation(); speedMenu.hidden=!speedMenu.hidden; voiceMenu.hidden=true; };
+    voiceBtn.onclick=function(e){ e.stopPropagation(); voiceMenu.hidden=!voiceMenu.hidden; speedMenu.hidden=true; };
+
+    speedMenu.querySelectorAll('.ap-opt').forEach(function(o){
+      o.onclick=function(){
+        rate=parseFloat(o.getAttribute('data-v'));
+        audio.playbackRate=rate;
+        speedBtn.textContent=rate+'x';
+        speedMenu.hidden=true;
+        speedMenu.querySelectorAll('.ap-opt').forEach(function(x){x.classList.toggle('active',x===o);});
+      };
+    });
+
+    /* 切音色无缝续播：wasPlaying 锁定切换前状态，等 onloadedmetadata 设完 currentTime 再 play() */
+    voiceMenu.querySelectorAll('.ap-opt').forEach(function(o){
+      o.onclick=function(){
+        var target=o.getAttribute('data-f');
+        if(!target) return;
+        var sameSrc=audio.src.endsWith(target);
+        if(sameSrc){ voiceMenu.hidden=true; return; }
+        var ratio=audio.duration?audio.currentTime/audio.duration:0;
+        var wasPlaying=!audio.paused;
+        cur=VOICES.findIndex(function(v){return v.f===target;});
+        audio.src=target;
+        audio.playbackRate=rate;
+        audio.onloadedmetadata=function(){
+          audio.onloadedmetadata=null;
+          try{ audio.currentTime=ratio*(audio.duration||0); }catch(e){}
+          tick();
+          if(wasPlaying){
+            var p=audio.play();
+            if(p && p.then){ p.then(syncPlayState).catch(function(){}); } else syncPlayState();
+          }
+        };
+        voiceBtn.textContent=o.getAttribute('data-n');
+        voiceMenu.hidden=true;
+        voiceMenu.querySelectorAll('.ap-opt').forEach(function(x){x.classList.toggle('active',x===o);});
+      };
+    });
+
+    speedMenu.querySelector('[data-v="1"]').classList.add('active');
+    voiceMenu.querySelector('[data-n="云希"]').classList.add('active');
+
+    /* ★ v10 默认收起 + hover ▶ 展开面板（从 ▶ 下方弹出）+ ▶ 永远不动 ★
+       - 默认只露 ▶ 红圆（独立 fixed, top:64 right:36）；hover ▶ → 面板从下方淡入
+       - ▶ 与面板是两个完全独立 fixed 元素，12px 间隙由 1500ms 延时兜底
+       - mouseleave 任意一个 → 1500ms 收起（让用户有时间点菜单）
+       - scroll/wheel/touchmove → 立即收起（不影响 audio 继续播放）
+       - ▶ 单击随时可用（强制展开 + 切换播放状态） */
+    var content=document.getElementById('apContent');
+    var closeTimer=null;
+    function clearCloseTimer(){ if(closeTimer){clearTimeout(closeTimer); closeTimer=null;} }
+    function expandNow(){ clearCloseTimer(); player.classList.add('is-open'); }
+    function collapseNow(){ clearCloseTimer(); speedMenu.hidden=voiceMenu.hidden=true; player.classList.remove('is-open'); }
+    function scheduleCollapse(){
+      clearCloseTimer();
+      closeTimer=setTimeout(function(){
+        /* 兜底：若 1500ms 后鼠标已不在 toggle 也未在 panel 上，才收起（覆盖 12px 间隙） */
+        if(!player.matches(':hover')) collapseNow();
+      }, 1500);
+    }
+    function forceExpand(){ clearCloseTimer(); player.classList.add('is-open'); }
+
+    /* v12 · hover 整个 player 胶囊（▶ 嵌在内、content 也在内、统一响应） */
+    player.addEventListener('mouseenter', expandNow);
+    player.addEventListener('mouseleave', scheduleCollapse);
+
+    /* 滚动/wheel/touchmove：立即收起（让出视野；不影响 audio 继续播放） */
+    var scrollRAF=null;
+    window.addEventListener('scroll', function(){
+      if(!player.classList.contains('is-open')) return;
+      if(scrollRAF) return;
+      scrollRAF=requestAnimationFrame(function(){
+        scrollRAF=null;
+        collapseNow();
+      });
+    }, {passive:true});
+    window.addEventListener('wheel', function(){
+      if(player.classList.contains('is-open')) collapseNow();
+    }, {passive:true});
+    window.addEventListener('touchmove', function(){
+      if(player.classList.contains('is-open')) collapseNow();
+    }, {passive:true});
+
+    /* 点击页面空白：收起菜单 + 收起面板（toggle/panel 内部 click 已被拦截） */
+    document.addEventListener('click', function(){
+      speedMenu.hidden=true; voiceMenu.hidden=true;
+      if(!player.matches(':hover')) collapseNow();
+    });
+    player.addEventListener('click', function(e){ e.stopPropagation(); });
+  })();
+</script>
 </script>
 <script src="../assets/free-lock.js?v=7"></script>
 </body>

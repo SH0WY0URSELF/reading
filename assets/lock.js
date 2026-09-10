@@ -7,7 +7,8 @@
   // 主站（8080）不走那条逻辑，直接清理避免本地测试时乱跳。
   try { localStorage.removeItem('vip_token'); } catch(e){}
 
-  var FREE_MODELS = "jie-gou-hua-si-wei|di-yi-xing-yuan-li|bian-zheng-si-wei|luo-ji-si-wei|chou-xiang-si-wei|xi-tong-si-wei|pi-pan-xing-si-wei|ni-xiang-si-wei".split("|");
+  // 免费模型 = 8 个核心 + 思维陷阱 → 错误的思维方式（11 个）
+  var FREE_MODELS = "jie-gou-hua-si-wei|di-yi-xing-yuan-li|bian-zheng-si-wei|luo-ji-si-wei|chou-xiang-si-wei|xi-tong-si-wei|pi-pan-xing-si-wei|ni-xiang-si-wei|yi-yuan-si-wei|er-yuan-si-wei|guan-xing-si-wei|lu-jing-yi-lai|xian-xing-si-wei|jue-dui-si-wei|xue-sheng-si-wei|qiong-ren-si-wei|ruo-zhe-si-wei|da-gong-si-wei|wei-ke-xue-si-wei".split("|");
   var FREE_BOOKS  = "纳瓦尔宝典|富爸爸穷爸爸|人类简史|国富论|孙子兵法".split("|");
   var FREE_CATS   = "cat-1|cat-2".split("|");
   var PAIN_FIRST  = {"自我认知":"迷茫","情绪管理":"焦虑","思考与决策":"盲目跟风","做事与执行":"拖延","人际关系":"过度在意他人看法"};
@@ -73,11 +74,11 @@
     }
   }
 
-  // 思维模型分类页：非 8 核心模型 + 非「错误的思维方式」子类 -> 加锁跳 intro
+  // 思维模型分类页：只有「错误的思维方式」子类 + 19 个免费模型可点；其余加锁跳 intro
   // 重要：cat-1 思维陷阱页内，split_sites.py 会把所有卡片 href 改写到 ../intro.html
   // （避免 public 站 404），所以不能用 href 反推 slug。改为：
   //   1) 优先用 closest('[data-sub="错误的思维方式"]') 判断：找到 = 放行
-  //   2) 兜底：如果 href 能解析 slug 且在 8 核心里 = 放行
+  //   2) 兜底：如果 href 能解析 slug 且在 FREE_MODELS 里 = 放行
   //   3) 其余：锁（加 main-locked + 灰色 SVG + 拦截 click 跳 intro）
   function lockModelCards(){
     document.querySelectorAll("a.model.done").forEach(function(a){
