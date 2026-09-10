@@ -155,17 +155,20 @@
       if(!title) return;
       var g = title.closest(".nav-group");
       if(!g) return;
-      // 手风琴：只保留当前分类展开
-      var all = document.querySelectorAll(".side-nav-problems .nav-group");
-      for(var i = 0; i < all.length; i++){
-        if(all[i] !== g) all[i].classList.add("collapsed");
-      }
-      g.classList.remove("collapsed");
       var action = firstUnlocked(g, title);
       if(!action) return;
       if(action.type === "show"){
+        // 页内切换：先做手风琴（只保留当前分类展开），再显示内容
+        var all = document.querySelectorAll(".side-nav-problems .nav-group");
+        for(var i = 0; i < all.length; i++){
+          if(all[i] !== g) all[i].classList.add("collapsed");
+        }
+        g.classList.remove("collapsed");
         showTarget(action.id);
       } else if(action.type === "nav"){
+        // ⚠️ 跳转前不要改 DOM（2026-09-10 实测踩到）：
+        // location.href 是异步导航，当前页会继续绘制一帧，侧栏折叠那一下会被画出来，
+        // 用户看到「点完页面动一下才跳走」。直接走人。
         window.location.href = action.href;
       }
       if(e.stopPropagation) e.stopPropagation();
