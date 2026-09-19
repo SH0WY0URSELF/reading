@@ -255,6 +255,7 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
   var OPTS = [{"val": 1, "label": "几乎不会出现"}, {"val": 2, "label": "偶尔出现，很快调整"}, {"val": 3, "label": "时不时出现，带来烦恼"}, {"val": 4, "label": "经常出现，消耗精力"}, {"val": 5, "label": "频繁出现，严重影响"}];
   var TOTAL = 23;
   var order = [], cur = 0, ans = new Array(TOTAL);
+  var lockUntil = 0;  // 切到新题后极短锁定，吞掉移动端 touch 后合成 click 的误触（避免下一题被默认选中）
 
   function shuffle(a){
     for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
@@ -291,12 +292,16 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
     backBtn.disabled = (cur===0);
     hintEl.textContent = (cur===0) ? '选一个最符合你真实状况的答案' : '';
     qOpts.innerHTML = '';
+    // 切题瞬间锁定点击：移动端点完上一题、本页 170ms 后进下一题，新选项渲染在原手指位置，
+    // 浏览器补发的合成 click 会误选下一题；锁定期内忽略点击，用户真实手动点才生效。
+    lockUntil = Date.now() + 400;
     OPTS.forEach(function(o){
       var b = document.createElement('button');
       b.className = 'asm-opt' + (ans[qi]===o.val ? ' on' : '');
       b.type = 'button';
       b.innerHTML = '<span class="n">'+o.val+'</span><span>'+o.label+'</span>';
       b.addEventListener('click', function(){
+        if(Date.now() < lockUntil) return;  // 切题误触锁：本帧内的合成 click 直接丢弃
         ans[qi] = o.val;
         var kids = qOpts.querySelectorAll('.asm-opt');
         for(var m=0;m<kids.length;m++){ kids[m].classList.remove('on'); }
