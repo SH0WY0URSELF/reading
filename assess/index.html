@@ -76,6 +76,7 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
   display:flex;align-items:center;gap:12px;width:100%;text-align:left;
   background:var(--card);border:1px solid var(--line-weak);border-radius:11px;
   padding:13px 16px;font-size:14.5px;color:var(--title);cursor:pointer;
+  touch-action:manipulation;
   transition:border-color .18s ease,background .18s ease,transform .18s ease;
 }
 .asm-opt:hover{border-color:rgba(224,67,46,.35);background:rgba(224,67,46,.04);transform:translateX(2px);}
@@ -255,7 +256,9 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
   var OPTS = [{"val": 1, "label": "几乎不会出现"}, {"val": 2, "label": "偶尔出现，很快调整"}, {"val": 3, "label": "时不时出现，带来烦恼"}, {"val": 4, "label": "经常出现，消耗精力"}, {"val": 5, "label": "频繁出现，严重影响"}];
   var TOTAL = 23;
   var order = [], cur = 0, ans = new Array(TOTAL);
-  var lockUntil = 0;  // 切到新题后极短锁定，吞掉移动端 touch 后合成 click 的误触（避免下一题被默认选中）
+  // downQid：记录「按下/触摸」落在哪道题的下标，用来拦截移动端把上一题的点击「转发」到下一题同位置元素、
+  // 造成「下一题默认被选中」的诡异现象。只有在本题上按下产生的点击才接受，转发的点击直接丢弃。
+  var downQid = -1;
 
   function shuffle(a){
     for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
@@ -292,16 +295,21 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
     backBtn.disabled = (cur===0);
     hintEl.textContent = (cur===0) ? '选一个最符合你真实状况的答案' : '';
     qOpts.innerHTML = '';
-    // 切题瞬间锁定点击：移动端点完上一题、本页 170ms 后进下一题，新选项渲染在原手指位置，
-    // 浏览器补发的合成 click 会误选下一题；锁定期内忽略点击，用户真实手动点才生效。
-    lockUntil = Date.now() + 400;
+    // 移动端在切题瞬间会把上一题的点击「转发」到新题同位置元素，导致下一题被默认选中。
+    // 下面用 pointerdown 记录真正按下的题号，只有「本题按下产生的」click 才接受（见 click 内守卫）。
     OPTS.forEach(function(o){
       var b = document.createElement('button');
       b.className = 'asm-opt' + (ans[qi]===o.val ? ' on' : '');
       b.type = 'button';
       b.innerHTML = '<span class="n">'+o.val+'</span><span>'+o.label+'</span>';
+      // 记录真正按下的题号；移动端把上一题点击「转发」到新题同位置元素时，该转发 click 没有在本题按下过，
+      // downQid 不会等于本题 qi，从而在下面的 click 守卫里被丢弃。
+      if(window.PointerEvent){
+        b.addEventListener('pointerdown', function(){ downQid = qi; }, {passive:true});
+      }
       b.addEventListener('click', function(){
-        if(Date.now() < lockUntil) return;  // 切题误触锁：本帧内的合成 click 直接丢弃
+        if(window.PointerEvent && downQid !== qi) return;  // 拦截转发点击：不是本题按下的，丢弃
+        downQid = -1;
         ans[qi] = o.val;
         var kids = qOpts.querySelectorAll('.asm-opt');
         for(var m=0;m<kids.length;m++){ kids[m].classList.remove('on'); }
