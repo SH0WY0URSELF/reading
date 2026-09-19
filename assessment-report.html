@@ -189,7 +189,7 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
         <span class="title">成长觉醒</span>
       </span>
     </a>
-    <div class="nav-tabs" role="tablist"><a role="tab" class="tab" href="growth-brain.html">第二大脑</a><a role="tab" class="tab" href="all.html">全部思维模型</a><a role="tab" class="tab" href="growth-stages.html">成长之路</a><a role="tab" class="tab" href="book-list.html">成长书单</a></div>
+    <div class="nav-tabs" role="tablist"><a role="tab" class="tab" href="growth-brain.html">第二大脑</a><a role="tab" class="tab active" href="ability-model.html">个人能力模型</a><a role="tab" class="tab" href="all.html">全部思维模型</a><a role="tab" class="tab" href="growth-stages.html">成长之路</a><a role="tab" class="tab" href="book-list.html">成长书单</a></div>
     <div class="right">
       
       <div class="gsearch" data-search="search.html"><form class="gsearch-form" role="search"><div class="gsearch-field"><input class="gsearch-input" type="text" placeholder="请输入搜索关键词" aria-label="搜索思维模型"><button class="gsearch-clear" type="button" aria-label="清空搜索"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><button class="gsearch-btn" type="submit" aria-label="搜索"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button></form></div>
@@ -319,7 +319,23 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
   }
 
   // ===== SVG → PNG =====
+  // 生成图片后优先调起系统分享面板（iOS/Android 可直接「存储图像」到相册）；
+  // 微信等内置浏览器不支持下载和分享，退回「长按图片保存到相册」弹层。
   function saveSvg(svgStr, w, h, filename){
+    var withPng = function(dataUrl){
+      // 尝试 Web Share（files）
+      try{
+        var bin = atob(dataUrl.split(',')[1]);
+        var arr = new Uint8Array(bin.length);
+        for(var i=0;i<bin.length;i++) arr[i] = bin.charCodeAt(i);
+        var file = new File([arr], filename, {type:'image/png'});
+        if(navigator.canShare && navigator.canShare({files:[file]})){
+          navigator.share({files:[file]}).catch(function(){});
+          return;
+        }
+      }catch(e){}
+      showSaveImg(dataUrl);
+    };
     try{
       var data = new XMLSerializer().serializeToString(
         new DOMParser().parseFromString(svgStr, 'image/svg+xml').documentElement);
@@ -332,14 +348,29 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
         var ctx = cv.getContext('2d');
         ctx.drawImage(img, 0, 0, w*2, h*2);
         URL.revokeObjectURL(url);
-        var a = document.createElement('a');
-        a.href = cv.toDataURL('image/png');
-        a.download = filename;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        withPng(cv.toDataURL('image/png'));
       };
       img.onerror = function(){ alert('生成图片失败，可改用截图。'); };
       img.src = url;
     }catch(e){ alert('生成图片失败，可改用截图。'); }
+  }
+
+  // 「长按图片保存到相册」弹层（内置浏览器兜底；电脑上可右键另存）
+  function showSaveImg(dataUrl){
+    var m = document.getElementById('saveImgMask');
+    if(!m){
+      m = document.createElement('div');
+      m.id = 'saveImgMask';
+      m.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;z-index:9999;background:rgba(20,15,12,.86);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
+      m.innerHTML = '<div style="color:#fff;font-size:15px;margin-bottom:12px;letter-spacing:.5px;">长按下面的图片，选择「保存到相册」</div>'
+        + '<img id="saveImgEl" style="max-width:82vw;max-height:68vh;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.4);" alt="长按保存">'
+        + '<div id="saveImgClose" style="color:rgba(255,255,255,.85);font-size:13px;margin-top:16px;cursor:pointer;padding:8px 30px;border:1px solid rgba(255,255,255,.5);border-radius:100px;">关 闭</div>';
+      document.body.appendChild(m);
+      document.getElementById('saveImgClose').addEventListener('click', function(){ m.style.display = 'none'; });
+      m.addEventListener('click', function(e){ if(e.target === m) m.style.display = 'none'; });
+    }
+    m.style.display = 'flex';
+    document.getElementById('saveImgEl').src = dataUrl;
   }
 
   // ===== 二维码 =====

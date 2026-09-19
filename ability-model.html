@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script>document.documentElement.classList.add('preload');</script>
+<script>
+(function(){
+  if("scrollRestoration" in history){ try{ history.scrollRestoration = "manual"; }catch(e){} }
+  var h = location.hash;
+  if(h){
+    try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+    window.__savedHash = h;
+  }
+  try{ window.scrollTo(0, 0); }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人能力模型</title>
+<link rel="stylesheet" href="assets/site.css?v=39">
+<link rel="stylesheet" href="assets/search.css?v=39">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet">
+<style>
+html.preload,html.preload *{transition:none!important;animation:none!important;}
+.pain-section{--abline:#6A6058;}
+
+/* ===== 左侧维度导航（与成长之路同款交互） ===== */
+.side-nav .nav-group{margin-bottom:12px;}
+.side-nav .group-title{
+  font-size:13.5px;font-weight:700;color:var(--title);letter-spacing:.3px;
+  padding:12px 12px 7px;
+  transition:background var(--dur) ease,color var(--dur) ease;
+  display:flex;align-items:center;justify-content:space-between;gap:6px;
+}
+.side-nav .group-title.active{color:var(--brand);}
+.side-nav .group-title.active .group-toggle{color:var(--brand);}
+.side-nav .nav-group ul{list-style:none;}
+.side-nav .nav-group li{margin:0 0 3px;}
+.side-nav .nav-group a{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 12px 9px 24px;border-radius:8px;position:relative;
+  font-size:13px;color:var(--text-2);text-decoration:none;letter-spacing:.2px;
+  transition:background var(--dur) ease,color var(--dur) ease;
+}
+.side-nav .nav-group a:hover{background:none;color:var(--brand);}
+.side-nav .nav-group a.active{
+  background:#fff;color:var(--brand);font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,0.06);
+}
+.side-nav .nav-group a.active::before{
+  content:'';position:absolute;left:5px;top:50%;transform:translateY(-50%);
+  width:3px;height:16px;background:var(--brand);border-radius:2px;
+}
+
+/* ===== 详情区块切换（机制同 .pain-section） ===== */
+.pain-section{margin-bottom:0;}
+.pain-section .core{margin-bottom:0;opacity:0;transform:translateY(12px);transition:opacity .45s ease,transform .45s ease;}
+.pain-section .core.reveal-in{opacity:1;transform:translateY(0);}
+@media (prefers-reduced-motion: reduce){
+  .pain-section .core{opacity:1;transform:none;transition:none;}
+}
+
+/* ===== 详情：白板手绘风（字体/字号/字重全照抄纳瓦尔宝典知识卡片） ===== */
+/* 通篇手写体 + 字重 400（对齐原版 --font-hand 体系） */
+.pain-section{
+  --abline:#6A6058;
+  font-family:var(--font-hand);
+}
+/* ===== 首页（abm-home）：直接照搬原个人能力评估页的居中首屏 =====
+   独立居中一块，不与左侧维度功能混排（用户红线） */
+/* 居中：max-width 加在内层 block 上（.stack 是 flex 列，直接在 flex 项上 margin auto 会收缩成内容宽） */
+.asm-hero{
+  max-width:880px;margin:0 auto;
+  background:var(--card);border:1px solid var(--line-weak);border-radius:16px;
+  padding:30px 26px;text-align:center;box-shadow:0 2px 10px rgba(32,25,20,.04);
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+.asm-hero h1{
+  font-family:var(--font-hand);font-size:30px;font-weight:700;color:var(--title);
+  letter-spacing:.5px;margin:0 0 14px;line-height:1.3;
+}
+.asm-meta{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin:0 0 20px;align-items:baseline;}
+.asm-meta span{font-size:13px;color:var(--text-2);}
+.asm-meta b{color:var(--brand);font-weight:700;font-size:24px;margin-right:3px;}
+.asm-start{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--brand);color:#fff;border:0;border-radius:100px;text-decoration:none;
+  padding:13px 34px;font-size:15.5px;font-weight:600;cursor:pointer;font-family:var(--font-hand);
+  letter-spacing:.5px;box-shadow:0 4px 14px rgba(224,67,46,.22);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.asm-start:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(224,67,46,.28);color:#fff;}
+.asm-hero .why{font-size:13.5px;color:#9C928A;line-height:1.8;margin:16px 0 0;white-space:nowrap;}
+
+/* ===== 首页：上一次的评估结果（本地留存，不清缓存 / 不重测就一直在） ===== */
+.asm-last{
+  max-width:880px;margin:16px auto 0;
+  background:var(--card);border:1px solid var(--line-weak);border-radius:16px;
+  padding:22px 26px;box-shadow:0 2px 10px rgba(32,25,20,.04);
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+.asm-last h2{
+  font-family:var(--font-hand);font-size:19px;font-weight:700;color:var(--title);
+  margin:0 0 6px;letter-spacing:.4px;
+}
+/* 时间并到标题后面，不再单独占一行 */
+.asm-last h2 .when{
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:12.5px;font-weight:400;color:#9C928A;margin-left:10px;letter-spacing:0;
+}
+.asm-last .row{
+  display:flex;align-items:center;gap:10px;padding:9px 0;
+  border-bottom:1px dashed var(--line-weak);
+}
+.asm-last .row:last-of-type{border-bottom:0;}
+.asm-last .nm{font-size:14.5px;color:var(--title);flex:1;}
+.asm-last .sev{
+  font-size:12px;font-weight:600;padding:2px 10px;border-radius:100px;
+  border:1px solid transparent;white-space:nowrap;
+}
+.asm-last .sc{font-size:14px;font-weight:700;min-width:64px;text-align:right;}
+.asm-last .more{
+  display:inline-block;margin-top:12px;font-size:14px;color:var(--brand);
+  font-weight:600;text-decoration:none;
+}
+.asm-last .more:hover{text-decoration:underline;}
+/* 等级徽章五档配色（与报告页完全一致） */
+.asm-last .lv-1{background:rgba(47,158,99,.12);color:#2F9E63;border-color:rgba(47,158,99,.35);}
+.asm-last .lv-2{background:rgba(124,168,60,.14);color:#6E9A2E;border-color:rgba(124,168,60,.38);}
+.asm-last .lv-3{background:rgba(217,147,13,.13);color:#B57A0A;border-color:rgba(217,147,13,.4);}
+.asm-last .lv-4{background:rgba(224,106,46,.12);color:#D65F24;border-color:rgba(224,106,46,.4);}
+.asm-last .lv-5{background:rgba(224,67,46,.10);color:var(--brand);border-color:rgba(224,67,46,.42);}
+@media(max-width:768px){
+  .asm-hero{padding:26px 18px;}
+  .asm-hero h1{font-size:24px;}
+  .asm-hero .why{white-space:normal;}
+  .asm-last{padding:20px 18px;}
+  .asm-last .sc{min-width:58px;}
+}
+/* 头卡：粗墨线 + 偏移阴影（不旋转） */
+.ab-hero{
+  background:var(--card);border:2.5px solid var(--abline);border-radius:14px;
+  box-shadow:3px 4px 0 rgba(32,25,20,.07);padding:26px 30px;
+  margin-bottom:8px;
+}
+.ab-hero h1{
+  font-size:40px;font-weight:400;color:var(--ink,#201914);
+  letter-spacing:1px;margin:0 0 12px;line-height:1.25;
+}
+.ab-role{font-size:20px;line-height:1.6;color:#201914;}
+.ab-role .rk{
+  color:var(--brand);font-weight:400;margin-right:8px;
+  border-bottom:3px solid rgba(224,67,46,.35);padding-bottom:1px;
+}
+/* 首页改走 .asm-*（原评估页版式），旧的自造按钮/提示样式已废弃 */
+
+/* 区块标题：红色手绘下划线（照抄 .sec-title：大字 + w400 + 斜红条）
+   字号 28px 与成长之路页 .ab-stitle 完全一致（用户红线：两页标题字体/字号/间距统一） */
+.ab-sec{margin-top:42px;}
+.ab-stitle{
+  font-size:28px;font-weight:400;color:#201914;letter-spacing:1px;
+  display:inline-block;position:relative;
+}
+.ab-stitle::after{
+  content:"";position:absolute;left:0;right:-6px;bottom:-7px;height:4px;
+  background:var(--brand);border-radius:3px;transform:rotate(-.6deg);
+}
+
+/* 缺失表现：红色椭圆标签（红框更显眼，对齐成长之路页 .pain-tag），左对齐不套框 */
+.sym-cloud{
+  margin-top:22px;display:flex;flex-wrap:wrap;gap:15px 14px;
+  align-items:center;
+}
+.stag{
+  font-size:18px;color:var(--brand);border:2px solid var(--brand);
+  border-radius:20px;padding:6px 16px;background:rgba(224,67,46,.04);
+  white-space:nowrap;line-height:1.4;
+}
+
+/* 落地方法：概念模块（红圆号收紧到 34 / 名称 23 / 正文 16；步骤圈 24+14字+17正文） */
+.ab-concepts{display:flex;flex-direction:column;gap:16px;margin-top:18px;}
+.concept{
+  background:var(--card);border:2.5px solid var(--abline);border-radius:16px;
+  padding:18px 20px;box-shadow:3px 4px 0 rgba(32,25,20,.06);
+}
+.concept .chead{display:flex;gap:12px;align-items:flex-start;}
+.concept .cnum{
+  flex:0 0 34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;
+  font-size:18px;display:flex;align-items:center;justify-content:center;
+}
+.concept .cname{font-size:23px;color:var(--brand);line-height:1.2;font-weight:400;}
+.concept .cone{font-size:16px;color:#9C928A;margin-top:4px;line-height:1.45;}
+/* 步骤：紧凑行内层级 */
+.concept .csteps{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+.concept .lv{display:flex;gap:12px;align-items:flex-start;}
+.concept .lvn{
+  flex:0 0 24px;height:24px;border-radius:50%;background:var(--abline);color:#fff;
+  font-size:14px;display:flex;align-items:center;justify-content:center;
+}
+.concept .lvc{font-size:17px;color:#201914;line-height:1.55;flex:1;}
+
+/* 待补充：虚线框（对齐 .example） */
+.ab-train{
+  margin-top:22px;padding:18px 20px;border:2px dashed var(--abline);
+  border-radius:12px;background:rgba(251,246,240,.7);
+}
+.ab-train .t{font-size:16px;color:#9C928A;margin-bottom:6px;letter-spacing:.5px;}
+.ab-train p{font-size:20px;color:#201914;line-height:1.5;}
+
+@media (max-width:768px){
+  .ab-hero{padding:22px 18px;}
+  .ab-hero h1{font-size:32px;}
+  .ab-stitle{font-size:23px;}
+  .ab-stitle::after{height:4px;bottom:-6px;}
+  .concept{padding:20px 16px;}
+  .concept .cname{font-size:24px;}
+  .concept .cone{font-size:16px;}
+  .concept .lvc{font-size:18px;}
+  .concept .lvn{flex:0 0 26px;height:26px;font-size:15px;}
+  .stag{font-size:15px;padding:6px 14px;}
+}
+
+/* 待补充：虚线框（对齐 .example） */
+.ab-train{
+  margin-top:22px;padding:18px 20px;border:2px dashed var(--abline);
+  border-radius:12px;background:rgba(251,246,240,.7);
+}
+.ab-train .t{font-size:14px;color:var(--text-2);margin-bottom:6px;letter-spacing:.5px;}
+.ab-train p{font-size:17px;color:var(--title);line-height:1.75;}
+
+@media (max-width:768px){
+  .ab-hero{padding:22px 18px;}
+  .ab-hero h1{font-size:30px;}
+  .ab-stitle{font-size:21px;}
+  .ab-stitle::after{height:4px;bottom:-6px;}
+  .concept{padding:20px 16px;}
+  .concept .cname{font-size:22px;}
+  .concept .cone{font-size:15px;}
+  .concept .lvc{font-size:17px;}
+  .stag{font-size:15px;padding:8px 16px;}
+}
+
+/* 关联痛点：手绘标签（对齐 .tagx） */
+.ab-pains{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
+.ab-pain{
+  font-size:14px;color:var(--title);background:var(--card);
+  border:2px solid var(--abline);border-radius:20px;padding:8px 17px;
+  text-decoration:none;box-shadow:2px 3px 0 rgba(32,25,20,.05);
+  transition:border-color .18s ease,color .18s ease,transform .18s ease;
+}
+.ab-pain:hover{border-color:var(--brand);color:var(--brand);transform:translateY(-2px);}
+
+@media (max-width:768px){
+  .ab-hero{padding:20px 18px;}
+  .ab-hero h1{font-size:27px;}
+  .ab-stitle{font-size:19px;}
+  .ab-stitle::after{height:4px;bottom:-6px;}
+  .concept{padding:18px 16px;}
+}
+</style>
+<style>:root{--side-width:0px !important}.wrap{margin-left:0 !important}#menuToggle{display:none !important}</style>
+<link rel="stylesheet" href="assets/free-lock.css?v=7">
+</head>
+<body>
+<nav class="site-nav" id="siteNav">
+  <div class="inner">
+    <button class="menu-toggle" id="menuToggle" aria-label="打开分类导航">☰</button>
+    <a class="brand" href="growth-brain.html">
+      <img class="site-icon" src="assets/site-icon.png" alt="成长觉醒" width="32" height="32">
+      <span class="brand-text">
+        <span class="title">成长觉醒</span>
+      </span>
+    </a>
+    <div class="nav-tabs" role="tablist"><a role="tab" class="tab" href="growth-brain.html">第二大脑</a><a role="tab" class="tab active" href="ability-model.html">个人能力模型</a><a role="tab" class="tab" href="all.html">全部思维模型</a><a role="tab" class="tab" href="growth-stages.html">成长之路</a><a role="tab" class="tab" href="book-list.html">成长书单</a></div>
+    <div class="right">
+      
+      <div class="gsearch" data-search="search.html"><form class="gsearch-form" role="search"><div class="gsearch-field"><input class="gsearch-input" type="text" placeholder="请输入搜索关键词" aria-label="搜索思维模型"><button class="gsearch-clear" type="button" aria-label="清空搜索"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><button class="gsearch-btn" type="submit" aria-label="搜索"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button></form></div>
+    </div>
+  </div>
+</nav>
+<script>
+(function(){
+  var tabs = document.querySelector('.nav-tabs');
+  function scrollTabIntoView(tab){
+    if(!tab || !tabs) return;
+    var cw = tabs.clientWidth, sw = tabs.scrollWidth;
+    if(sw <= cw) return;
+    // 让 active tab 出现在容器左侧约 1/4 处，确保前面一个 tab 也能露出来
+    var relLeft = tab.offsetLeft - tabs.offsetLeft;
+    var target = relLeft - cw * 0.25;
+    tabs.scrollTo({left: Math.max(0, Math.min(target, sw - cw)), behavior: 'smooth'});
+  }
+  if(tabs){
+    var active = tabs.querySelector('.tab.active');
+    if(active) setTimeout(function(){ scrollTabIntoView(active); }, 0);
+    tabs.addEventListener('click', function(e){
+      var t = e.target.closest('.tab');
+      if(t) setTimeout(function(){ scrollTabIntoView(t); }, 0);
+    });
+  }
+})();
+</script>
+<div class="wrap">
+  <div class="stack" id="abmStack">
+
+<section class="pain-section" id="abm-home" style="display:none;">
+  <div class="asm-hero core core-first">
+    <h1>个人能力评估</h1>
+    <div class="asm-meta">
+      <span><b>23</b> 道题</span>
+      <span>约 <b>3</b> 分钟</span>
+      <span><b>5</b> 大维度</span>
+    </div>
+    <a class="asm-start" href="assessment.html">开始评估 →</a>
+    <p class="why">根据你的选择，评估你在哪方面的能力可能存在不足。</p>
+  </div>
+  <div class="asm-last" id="abmLast" style="display:none;"></div>
+</section>
+
+</div>
+</div>
+<script>
+/* 切换能力详情 */
+(function(){
+  var sections = document.querySelectorAll('.pain-section');
+  var links = document.querySelectorAll('.side-nav a[data-target]');
+  var groups = document.querySelectorAll('.nav-group');
+  function show(id, noScroll, animate){
+    if(animate === undefined) animate = true;
+    window.__shownId = id;
+    try{ sessionStorage.setItem('abmCurrent', id); }catch(e){}
+    sections.forEach(function(s){ s.style.display = (s.id === id ? 'block' : 'none'); });
+    links.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('data-target') === id);
+    });
+    if(!noScroll){
+      setTimeout(function(){ window.scrollTo(0, 0); }, 0);
+    }
+    var activeLink = document.querySelector('.side-nav a.active');
+    var activeGroup = activeLink ? activeLink.getAttribute('data-group') : null;
+    // 首页态（无 hash）所有分组默认折叠，只留维度标题行（对齐成长之路页）；有 hash 才展开所在分组
+    groups.forEach(function(g){
+      var isActive = g.getAttribute('data-group') === activeGroup;
+      var title = g.querySelector('.group-title');
+      if(title) title.classList.toggle('active', isActive);
+      if(window.innerWidth > 768){
+        if(isActive) g.classList.remove('collapsed');
+        else g.classList.add('collapsed');
+      }
+    });
+    var cur = document.getElementById(id);
+    if(cur && animate){
+      var cores = cur.querySelectorAll('.core');
+      cores.forEach(function(el, i){
+        el.classList.remove('reveal-in');
+        void el.offsetWidth;
+        setTimeout(function(){ el.classList.add('reveal-in'); }, 60 + i * 90);
+      });
+    }
+  }
+  links.forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+      show(a.getAttribute('data-target'));
+      if(window.innerWidth < 900){
+        var sideNav = document.getElementById('sideNav');
+        var sideOverlay = document.getElementById('sideOverlay');
+        if(sideNav) sideNav.classList.remove('open');
+        if(sideOverlay) sideOverlay.classList.remove('show');
+      }
+    });
+  });
+  var firstGroupNav = document.querySelector('.side-nav .nav-group');
+  var firstNavLink = firstGroupNav ? firstGroupNav.querySelector('ul li a') : null;
+  var first = firstNavLink ? (firstNavLink.getAttribute('data-target') || firstNavLink.getAttribute('href') || '') : (sections[0] ? sections[0].id : '');
+  first = first.replace(/^#/, '');
+  var rawHash = window.__savedHash || location.hash || '';
+  var hash = rawHash ? decodeURIComponent(rawHash.replace('#','')) : '';
+  // 刷新停留在当前能力：hash 直达 > 本次会话记住的 > 第一个
+  var saved = '';
+  try{ saved = sessionStorage.getItem('abmCurrent') || ''; }catch(e){}
+  // 无 hash 时默认进入首页（评估优先），有 hash 才直达具体能力
+  var target = hash || 'abm-home';
+  show(document.getElementById(target) ? target : first, true, false);
+  window.addEventListener('load', function(){ try{ window.scrollTo(0, 0); }catch(e){} });
+  function revealFirst(){
+    var cur = document.getElementById(window.__shownId);
+    if(!cur) return;
+    cur.querySelectorAll('.core').forEach(function(el, i){
+      setTimeout(function(){ el.classList.add('reveal-in'); }, 30 + i * 70);
+    });
+  }
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      document.documentElement.classList.remove('preload');
+      revealFirst();
+    });
+  });
+  setTimeout(function(){
+    var cur = document.getElementById(window.__shownId);
+    if(cur && cur.querySelector('.core:not(.reveal-in)')) revealFirst();
+  }, 800);
+  window.showAbility = show;
+})();
+
+/* 移动端侧边栏 */
+(function(){
+  var menuToggle = document.getElementById('menuToggle');
+  var sideNav = document.getElementById('sideNav');
+  var sideOverlay = document.getElementById('sideOverlay');
+  function openSide(){ if(sideNav){ sideNav.classList.add('open'); sideOverlay && sideOverlay.classList.add('show'); } }
+  function closeSide(){ if(sideNav){ sideNav.classList.remove('open'); sideOverlay && sideOverlay.classList.remove('show'); } }
+  if(menuToggle){
+    function onMenuTap(e){
+      e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+      e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
+      sideNav.classList.contains('open') ? closeSide() : openSide();
+    }
+    menuToggle.addEventListener('click', onMenuTap);
+    menuToggle.addEventListener('touchstart', onMenuTap, {passive:false});
+  }
+  if(sideOverlay){ sideOverlay.addEventListener('click', closeSide); sideOverlay.addEventListener('touchstart', closeSide, {passive:false}); }
+})();
+
+/* 侧边栏手动滚动箭头 */
+(function(){
+  var scroll = document.getElementById('sideScroll');
+  var up = document.getElementById('sideUp');
+  var down = document.getElementById('sideDown');
+  var hint = document.getElementById('sideHint');
+  if(!scroll || !up || !down) return;
+  var step = 112;
+  var hideTimer = null;
+  function showHint(text, isTop){
+    if(!hint) return;
+    hint.textContent = text;
+    hint.className = 'side-hint ' + (isTop ? 'top' : 'bottom');
+    requestAnimationFrame(function(){ hint.classList.add('show'); });
+    if(hideTimer) clearTimeout(hideTimer);
+    hideTimer = setTimeout(function(){ hint.classList.remove('show'); }, 1400);
+  }
+  function updateArrows(){
+    var sh = scroll.scrollHeight, st = scroll.scrollTop, ch = scroll.clientHeight;
+    var atTop = st <= 1;
+    var atBottom = st + ch >= sh - 1;
+    up.disabled = atTop; up.classList.toggle('disabled', atTop);
+    down.disabled = atBottom; down.classList.toggle('disabled', atBottom);
+  }
+  function scrollBy(delta){ scroll.scrollBy({top: delta, behavior: 'smooth'}); }
+  up.addEventListener('click', function(){ if(scroll.scrollTop <= 1){ showHint('已到达顶部', true); return; } scrollBy(-step); });
+  down.addEventListener('click', function(){ if(scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 1){ showHint('已到达底部', false); return; } scrollBy(step); });
+  scroll.addEventListener('scroll', updateArrows, {passive: true});
+  window.addEventListener('load', updateArrows);
+  updateArrows();
+})();
+
+/* 左侧分组折叠/展开：点一次展开；已展开的再点一次 → 收起 + 取消选中 + 回本页首页 */
+(function(){
+  document.querySelectorAll('.side-nav .group-title').forEach(function(title){
+    title.addEventListener('click', function(e){
+      if(e.target.closest('a')) return;
+      var g = title.closest('.nav-group');
+      if(!g) return;
+      // 已经展开：再点一次收起，并且不选中任何一项，直接回首页
+      if(!g.classList.contains('collapsed')){
+        document.querySelectorAll('.side-nav a.active').forEach(function(a){ a.classList.remove('active'); });
+        if(typeof window.showAbility === 'function'){ window.showAbility('abm-home', true); }
+        return;
+      }
+      // 未展开：手风琴展开当前分类、收起其它分类，并选中该分类下第一项能力
+      document.querySelectorAll('.nav-group').forEach(function(o){ if(o !== g) o.classList.add('collapsed'); });
+      g.classList.remove('collapsed');
+      var firstLink = g.querySelector('ul li a');
+      var target = '';
+      if(firstLink){
+        target = firstLink.getAttribute('data-target') || firstLink.getAttribute('href') || '';
+      }
+      target = target.replace(/^#/, '');
+      if(target && typeof window.showAbility === 'function'){
+        window.showAbility(target, true);
+      }
+    });
+  });
+})();
+
+/* 首页：渲染上一次的评估结果（数据由报告页写入 localStorage） */
+(function(){
+  var el = document.getElementById('abmLast');
+  if(!el) return;
+  var raw = null;
+  try{ raw = localStorage.getItem('abmLastResult'); }catch(e){ return; }
+  if(!raw) return;
+  var d = null;
+  try{ d = JSON.parse(raw); }catch(e){ return; }
+  if(!d || !d.dims || !d.dims.length) return;
+  function tier(sc){
+    if(sc >= 4.2) return ['lv-1', '#2F9E63'];
+    if(sc >= 3.4) return ['lv-2', '#6E9A2E'];
+    if(sc >= 2.6) return ['lv-3', '#D9930D'];
+    if(sc >= 1.8) return ['lv-4', '#E06A2E'];
+    return ['lv-5', '#E0432E'];
+  }
+  function esc(s){
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function pad2(n){ return n < 10 ? ('0' + n) : ('' + n); }
+  var rows = d.dims.map(function(x){
+    var t = tier(x.score);
+    return '<div class="row">'
+      + '<span class="nm">' + esc(x.name) + '</span>'
+      + '<span class="sev ' + t[0] + '">' + esc(x.lv) + '</span>'
+      + '<span class="sc"><span style="color:' + t[1] + '">' + Number(x.score).toFixed(1) + '</span> / 5.0</span>'
+      + '</div>';
+  }).join('');
+  var when = '';
+  if(d.ts){
+    var dt = new Date(d.ts);
+    when = dt.getFullYear() + '-' + pad2(dt.getMonth() + 1) + '-' + pad2(dt.getDate())
+         + ' ' + pad2(dt.getHours()) + ':' + pad2(dt.getMinutes());
+  }
+  el.innerHTML = '<h2>上一次的评估结果' + (when ? '<span class="when">' + when + '</span>' : '') + '</h2>'
+    + rows
+    + '<a class="more" href="assessment-report.html?s=' + encodeURIComponent(d.s) + '">查看完整报告 →</a>';
+  el.style.display = 'block';
+})();
+</script>
+<script src="assets/free-lock.js?v=7"></script>
+</body>
+</html>
