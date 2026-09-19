@@ -165,7 +165,7 @@
         <span class="title">成长觉醒</span>
       </span>
     </a>
-    <div class="nav-tabs" role="tablist"><a role="tab" class="tab active" href="growth-brain.html">第二大脑</a><a role="tab" class="tab" href="ability-model.html">个人能力模型</a><a role="tab" class="tab" href="all.html">全部思维模型</a><a role="tab" class="tab" href="growth-stages.html">成长之路</a><a role="tab" class="tab" href="book-list.html">成长书单</a></div>
+    <div class="nav-tabs" role="tablist"><a role="tab" class="tab active" href="growth-brain.html">第二大脑</a><a role="tab" class="tab" href="all.html">全部思维模型</a><a role="tab" class="tab" href="growth-stages.html">成长之路</a><a role="tab" class="tab" href="book-list.html">成长书单</a></div>
     <div class="right">
       
       
@@ -7332,7 +7332,7 @@ function jumpToDetail(d){
     const file = MODEL_SLUGS[rawSlug] || MODEL_SLUGS[slug];
     if(file) window.open('models/' + file, '_blank');
   } else if(d.type === 'ability'){
-    window.open('ability-model.html#p-' + d.label, '_blank');
+    /* [free] 能力详情为付费功能，跳转已移除 */ void 0;
   }
 }
 
