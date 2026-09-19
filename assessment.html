@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script>document.documentElement.classList.add('preload');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人能力评估</title>
+<link rel="stylesheet" href="assets/site.css?v=39">
+<link rel="stylesheet" href="assets/search.css?v=39">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet">
+<style>
+html.preload,html.preload *{transition:none!important;animation:none!important;}
+
+/* 页面容器 */
+.asm-wrap{max-width:880px;margin:0 auto;padding:26px 20px 72px;}
+@media(max-width:768px){.asm-wrap{padding:18px 15px 60px;}}
+
+/* 首屏 Hero */
+.asm-hero{
+  background:var(--card);border:1px solid var(--line-weak);border-radius:16px;
+  padding:30px 26px;text-align:center;box-shadow:0 2px 10px rgba(32,25,20,.04);
+}
+.asm-hero h1{
+  font-family:var(--font-hand);font-size:30px;font-weight:700;color:var(--title);
+  letter-spacing:.5px;margin:0 0 10px;line-height:1.3;
+}
+.asm-hero .sub{font-size:14.5px;color:var(--text-2);line-height:1.75;margin:0 0 20px;}
+/* 核心数字放大置顶（用户第一眼看到成本：23 题 / 3 分钟 / 5 维度） */
+.asm-meta{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin:0 0 24px;align-items:baseline;}
+.asm-meta span{font-size:13px;color:var(--text-2);}
+.asm-meta b{color:var(--brand);font-weight:700;font-size:24px;margin-right:3px;}
+.asm-hero .why{
+  font-size:13.5px;color:#9C928A;line-height:1.8;margin:20px 0 0;white-space:nowrap;
+}
+@media(max-width:768px){.asm-hero .why{white-space:normal;}}
+.asm-start{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--brand);color:#fff;border:0;border-radius:100px;
+  padding:13px 34px;font-size:15.5px;font-weight:600;cursor:pointer;
+  letter-spacing:.5px;box-shadow:0 4px 14px rgba(224,67,46,.22);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.asm-start:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(224,67,46,.28);}
+
+/* 答题区 */
+.asm-quiz{display:none;}
+.asm-quiz.show{display:block;}
+.asm-progress{margin-bottom:18px;}
+.asm-progress .top{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-size:13px;color:var(--text-2);margin-bottom:8px;letter-spacing:.3px;
+}
+.asm-progress .top b{color:var(--brand);font-size:15px;font-weight:700;}
+.asm-bar{height:5px;background:var(--line-weak);border-radius:100px;overflow:hidden;}
+.asm-bar i{
+  display:block;height:100%;background:var(--brand);border-radius:100px;
+  width:0;transition:width .32s cubic-bezier(.25,1,.5,1);
+}
+.asm-card{
+  background:var(--card);border:1px solid var(--line-weak);border-radius:16px;
+  padding:26px 24px;box-shadow:0 2px 10px rgba(32,25,20,.04);
+}
+.asm-q{font-family:var(--font-hand);font-size:20px;font-weight:700;color:var(--title);line-height:1.6;margin:0 0 20px;}
+.asm-opts{display:flex;flex-direction:column;gap:9px;}
+.asm-opt{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:var(--card);border:1px solid var(--line-weak);border-radius:11px;
+  padding:13px 16px;font-size:14.5px;color:var(--title);cursor:pointer;
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+.asm-opt:hover{border-color:rgba(224,67,46,.35);background:rgba(224,67,46,.04);transform:translateX(2px);}
+.asm-opt.on{border-color:var(--brand);background:rgba(224,67,46,.07);font-weight:600;}
+.asm-opt .n{
+  flex:0 0 auto;width:22px;height:22px;border-radius:50%;
+  background:rgba(224,67,46,.10);color:var(--brand);font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.asm-opt.on .n{background:var(--brand);color:#fff;}
+.asm-nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px;}
+.asm-back{
+  background:none;border:0;color:var(--text-2);font-size:13.5px;cursor:pointer;
+  padding:8px 4px;letter-spacing:.3px;
+}
+.asm-back:hover{color:var(--brand);}
+.asm-back[disabled]{opacity:.35;cursor:default;}
+.asm-hint{font-size:12.5px;color:#9C928A;}
+
+/* ===== 报告页 ===== */
+/* 标题句（如「情绪管理严重不足」读着像病句，已按用户要求去掉）：黑框里只留 kicker + 五维雷达 */
+.rep-hero{
+  background:#241F1B;border-radius:18px;padding:14px 18px 10px;color:#F5EFE7;
+  box-shadow:0 6px 22px rgba(32,25,20,.18);
+}
+.rep-hero .rp-kicker{
+  font-size:13px;letter-spacing:2px;color:rgba(245,239,231,.55);
+  margin:0 0 4px;text-align:center;
+}
+.rep-hero .rp-type{
+  font-family:var(--font-hand);font-size:28px;font-weight:700;color:#FFF9F2;
+  text-align:center;letter-spacing:1.5px;margin:0 0 6px;line-height:1.4;
+}
+.rep-hero svg{display:block;margin:0 auto;max-width:100%;height:auto;}
+
+/* 区块 */
+.rep-sec{margin-top:30px;}
+.rep-sec h2{
+  font-family:var(--font-hand);font-size:19px;font-weight:700;color:var(--title);
+  letter-spacing:.4px;margin:0 0 13px;
+}
+
+/* 等级徽章（按分数五档过渡：优秀绿→良好浅绿→偏弱黄→明显不足橙→严重不足红） */
+.lv{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:100px;white-space:nowrap;flex:0 0 auto;border:1px solid transparent;}
+.lv-1{background:rgba(47,158,99,.12);color:#2F9E63;border-color:rgba(47,158,99,.35);}
+.lv-2{background:rgba(124,168,60,.14);color:#6E9A2E;border-color:rgba(124,168,60,.38);}
+.lv-3{background:rgba(217,147,13,.13);color:#B57A0A;border-color:rgba(217,147,13,.4);}
+.lv-4{background:rgba(224,106,46,.12);color:#D65F24;border-color:rgba(224,106,46,.4);}
+.lv-5{background:rgba(224,67,46,.10);color:var(--brand);border-color:rgba(224,67,46,.42);}
+
+/* 五维分析卡：一行 2~3 个（前三个都是明显不足/严重不足就 3+2，否则 2+3），行内均分 */
+.rep-dims{display:flex;flex-direction:column;gap:12px;}
+.rep-row{display:flex;gap:12px;}
+.rep-row .rep-dim{flex:1 1 0;min-width:0;}
+.rep-dim{
+  background:var(--card);border:1px solid var(--line-weak);border-radius:15px;
+  padding:19px 20px;
+}
+/* 头部一行排布：徽章 + 名称 + 分数强制同一行，分数靠右对齐；窄卡也不许换行 */
+.rep-dim .hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:nowrap;}
+.rep-dim .nm{font-family:var(--font-hand);font-size:16px;font-weight:700;color:var(--title);letter-spacing:.3px;white-space:nowrap;}
+.rep-dim .sc{font-size:12px;color:var(--text-2);margin-left:auto;white-space:nowrap;flex:0 0 auto;}
+.rep-track{height:5px;background:var(--line-weak);border-radius:100px;overflow:hidden;margin-bottom:13px;}
+.rep-track i{display:block;height:100%;background:var(--brand);border-radius:100px;}
+.rep-dim .ana{font-size:14.5px;line-height:1.85;color:var(--title);margin:0;}
+
+/* 操作区：三个按钮居中 */
+.rep-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px;justify-content:center;}
+.rep-btn{
+  background:var(--card);border:1px solid var(--line-weak);border-radius:100px;
+  padding:11px 22px;font-size:14px;color:var(--title);cursor:pointer;
+  transition:border-color .18s ease,color .18s ease;text-decoration:none;display:inline-block;
+}
+.rep-btn:hover{border-color:var(--brand);color:var(--brand);}
+.rep-btn.primary{background:var(--brand);color:#fff;border-color:var(--brand);}
+.rep-btn.primary:hover{opacity:.92;color:#fff;}
+.rep-btn.bridge{background:rgba(224,67,46,.08);border-color:var(--brand);color:var(--brand);font-weight:600;}
+.rep-btn.bridge:hover{background:rgba(224,67,46,.14);color:var(--brand);}
+
+.rep-note{
+  margin-top:24px;padding:14px 16px;border-radius:12px;
+  background:rgba(32,25,20,.035);font-size:12px;color:var(--text-2);line-height:1.75;
+}
+.rep-empty{text-align:center;padding:60px 20px;color:var(--text-2);font-size:14.5px;}
+.rep-empty a{color:var(--brand);font-weight:600;text-decoration:none;}
+
+/* 分享弹层 */
+.share-mask{
+  display:none;position:fixed;inset:0;background:rgba(32,25,20,.55);z-index:99;
+  align-items:center;justify-content:center;padding:20px;
+}
+.share-mask.show{display:flex;}
+.share-pop{
+  background:var(--card);border-radius:16px;padding:16px;max-width:400px;width:100%;
+  max-height:92vh;overflow:auto;
+}
+.share-pop img{display:block;width:100%;height:auto;border-radius:10px;}
+.share-btns{display:flex;gap:8px;margin-top:12px;}
+.share-btns .rep-btn{flex:1;text-align:center;padding:10px 6px;font-size:13px;}
+@media(max-width:768px){
+  .rep-row{flex-direction:column;}
+  .rep-row .rep-dim{flex:1 1 auto;}
+}
+@media(prefers-reduced-motion:reduce){
+  .asm-opt,.asm-start,.rep-btn{transition:none;}
+}
+</style>
+<link rel="stylesheet" href="assets/free-lock.css?v=7">
+</head>
+<body>
+<nav class="site-nav" id="siteNav">
+  <div class="inner">
+    
+    <a class="brand" href="growth-brain.html">
+      <img class="site-icon" src="assets/site-icon.png" alt="成长觉醒" width="32" height="32">
+      <span class="brand-text">
+        <span class="title">成长觉醒</span>
+      </span>
+    </a>
+    <div class="nav-tabs" role="tablist"><a role="tab" class="tab" href="growth-brain.html">第二大脑</a><a role="tab" class="tab active" href="ability-model.html">个人能力模型</a><a role="tab" class="tab" href="all.html">全部思维模型</a><a role="tab" class="tab" href="growth-stages.html">成长之路</a><a role="tab" class="tab" href="book-list.html">成长书单</a></div>
+    <div class="right">
+      
+      <div class="gsearch" data-search="search.html"><form class="gsearch-form" role="search"><div class="gsearch-field"><input class="gsearch-input" type="text" placeholder="请输入搜索关键词" aria-label="搜索思维模型"><button class="gsearch-clear" type="button" aria-label="清空搜索"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><button class="gsearch-btn" type="submit" aria-label="搜索"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button></form></div>
+    </div>
+  </div>
+</nav>
+<script>
+(function(){
+  var tabs = document.querySelector('.nav-tabs');
+  function scrollTabIntoView(tab){
+    if(!tab || !tabs) return;
+    var cw = tabs.clientWidth, sw = tabs.scrollWidth;
+    if(sw <= cw) return;
+    // 让 active tab 出现在容器左侧约 1/4 处，确保前面一个 tab 也能露出来
+    var relLeft = tab.offsetLeft - tabs.offsetLeft;
+    var target = relLeft - cw * 0.25;
+    tabs.scrollTo({left: Math.max(0, Math.min(target, sw - cw)), behavior: 'smooth'});
+  }
+  if(tabs){
+    var active = tabs.querySelector('.tab.active');
+    if(active) setTimeout(function(){ scrollTabIntoView(active); }, 0);
+    tabs.addEventListener('click', function(e){
+      var t = e.target.closest('.tab');
+      if(t) setTimeout(function(){ scrollTabIntoView(t); }, 0);
+    });
+  }
+})();
+</script>
+<div class="asm-wrap">
+
+<div class="asm-quiz show" id="asmQuiz">
+  <div class="asm-progress">
+    <div class="top"><span>第 <b id="asmNow">1</b> / 23 题</span><span id="asmHint">选一个最符合你真实状况的答案</span></div>
+    <div class="asm-bar"><i id="asmBar"></i></div>
+  </div>
+  <div class="asm-card">
+    <p class="asm-q" id="asmQ"></p>
+    <div class="asm-opts" id="asmOpts"></div>
+    <div class="asm-nav">
+      <button class="asm-back" id="asmBack" type="button" disabled>← 上一题</button>
+      <span class="asm-hint">选完自动进入下一题</span>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+(function(){
+  var QS = [{"i": 0, "t": "你经常感到迷茫，不清楚自己想要什么，总是找不到努力的方向"}, {"i": 1, "t": "你很容易自卑，总是拿自己和别人作对比，总觉得自己不如别人"}, {"i": 2, "t": "你习惯否定自己，总是盯着自己的缺点和做错的事"}, {"i": 3, "t": "你很需要别人的认可，总是期待别人对你的肯定"}, {"i": 4, "t": "你特别害怕失败，担心做错事被人笑话，怕丢脸"}, {"i": 5, "t": "你很容易焦虑，心里总是不踏实，经常感到烦躁"}, {"i": 6, "t": "你经常胡思乱想，就算只是一件小事，也会反复琢磨"}, {"i": 7, "t": "你的情绪起伏很大，常常会因为一点小事就发脾气"}, {"i": 8, "t": "你的心思比较敏感，常常会为了顾及别人的感受，而委屈自己"}, {"i": 9, "t": "你缺少自己的主见，做决定时，习惯参考大多数人的做法"}, {"i": 10, "t": "你在做选择时，总是特别纠结，很难快速做决定"}, {"i": 11, "t": "你很容易轻信别人说的话，还因此吃了不少亏"}, {"i": 12, "t": "你很容易在冲动的情况下做决定，事后又会因为自己的冲动而后悔"}, {"i": 13, "t": "就算你手上堆了很多任务，也不愿意提前开始，总是拖到最后期限才动手，甚至会来不及做完"}, {"i": 14, "t": "你总是会制定很多计划，但这些计划又很难真正地执行"}, {"i": 15, "t": "你很难长时间集中注意力，做事很容易分心"}, {"i": 16, "t": "你总是给自己找很多事做，一直都很忙，但是却没有成长"}, {"i": 17, "t": "你总是讨好身边的人，不好意思拒绝别人的请求，又害怕发生冲突，习惯迁就别人"}, {"i": 18, "t": "你十分在意别人对你的眼光和看法，别人对你的批评会直接影响你的心态"}, {"i": 19, "t": "你在社交中经常会感到紧张或恐惧，会主动避开各种社交场合"}, {"i": 20, "t": "你总是希望用自己的方式，去改变别人，希望对方能按自己的要求做事"}, {"i": 21, "t": "你在沟通过程中，不能准确传达自己的想法，让对方很难理解你"}, {"i": 22, "t": "面对别人的无理要求，你也总是习惯忍让，缺少自己的底线"}];
+  var OPTS = [{"val": 1, "label": "几乎不会出现"}, {"val": 2, "label": "偶尔出现，很快调整"}, {"val": 3, "label": "时不时出现，带来烦恼"}, {"val": 4, "label": "经常出现，消耗精力"}, {"val": 5, "label": "频繁出现，严重影响"}];
+  var TOTAL = 23;
+  var order = [], cur = 0, ans = new Array(TOTAL);
+
+  function shuffle(a){
+    for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+    return a;
+  }
+
+  var hero = document.getElementById('asmHero');
+  var quiz = document.getElementById('asmQuiz');
+  var qText = document.getElementById('asmQ');
+  var qOpts = document.getElementById('asmOpts');
+  var bar = document.getElementById('asmBar');
+  var nowEl = document.getElementById('asmNow');
+  var backBtn = document.getElementById('asmBack');
+  var hintEl = document.getElementById('asmHint');
+
+  function start(){
+    order = shuffle(QS.map(function(q){ return q.i; }));
+    cur = 0; ans = new Array(TOTAL);
+    if(hero) hero.style.display = 'none';
+    var hw = document.getElementById('asmHome');
+    if(hw) hw.style.display = 'none';
+    quiz.classList.add('show');
+    render();
+    try{ window.scrollTo(0,0); }catch(e){}
+  }
+
+  function render(){
+    var qi = order[cur];
+    var q = null;
+    for(var k=0;k<QS.length;k++){ if(QS[k].i===qi){ q=QS[k]; break; } }
+    qText.textContent = q.t;
+    nowEl.textContent = (cur+1);
+    bar.style.width = Math.round((cur+1)/TOTAL*100) + '%';
+    backBtn.disabled = (cur===0);
+    hintEl.textContent = (cur===0) ? '选一个最符合你真实状况的答案' : '';
+    qOpts.innerHTML = '';
+    OPTS.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'asm-opt' + (ans[qi]===o.val ? ' on' : '');
+      b.type = 'button';
+      b.innerHTML = '<span class="n">'+o.val+'</span><span>'+o.label+'</span>';
+      b.addEventListener('click', function(){
+        ans[qi] = o.val;
+        var kids = qOpts.querySelectorAll('.asm-opt');
+        for(var m=0;m<kids.length;m++){ kids[m].classList.remove('on'); }
+        b.classList.add('on');
+        setTimeout(next, 170);
+      });
+      qOpts.appendChild(b);
+    });
+  }
+
+  function next(){
+    if(cur < TOTAL-1){ cur++; render(); try{ window.scrollTo(0,0); }catch(e){} }
+    else finish();
+  }
+
+  function finish(){
+    var s = '';
+    for(var i=0;i<TOTAL;i++){ s += (ans[i] || 1); }
+    location.href = 'assessment-report.html?s=' + s;
+  }
+
+  backBtn.addEventListener('click', function(){
+    if(cur>0){ cur--; render(); }
+  });
+
+  // 主站：打开直接进第 1 题；独立版：挂到 window 上等「开始评估」按钮触发
+  start();
+})();
+</script>
+<script>
+requestAnimationFrame(function(){
+  requestAnimationFrame(function(){
+    document.documentElement.classList.remove('preload');
+  });
+});
+</script>
+<script src="assets/free-lock.js?v=7"></script>
+</body>
+</html>

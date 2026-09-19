@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script>document.documentElement.classList.add('preload');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的能力报告</title>
+<link rel="stylesheet" href="assets/site.css?v=39">
+<link rel="stylesheet" href="assets/search.css?v=39">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet">
+<style>
+html.preload,html.preload *{transition:none!important;animation:none!important;}
+
+/* 页面容器 */
+.asm-wrap{max-width:880px;margin:0 auto;padding:26px 20px 72px;}
+@media(max-width:768px){.asm-wrap{padding:18px 15px 60px;}}
+
+/* 首屏 Hero */
+.asm-hero{
+  background:var(--card);border:1px solid var(--line-weak);border-radius:16px;
+  padding:30px 26px;text-align:center;box-shadow:0 2px 10px rgba(32,25,20,.04);
+}
+.asm-hero h1{
+  font-family:var(--font-hand);font-size:30px;font-weight:700;color:var(--title);
+  letter-spacing:.5px;margin:0 0 10px;line-height:1.3;
+}
+.asm-hero .sub{font-size:14.5px;color:var(--text-2);line-height:1.75;margin:0 0 20px;}
+/* 核心数字放大置顶（用户第一眼看到成本：23 题 / 3 分钟 / 5 维度） */
+.asm-meta{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin:0 0 24px;align-items:baseline;}
+.asm-meta span{font-size:13px;color:var(--text-2);}
+.asm-meta b{color:var(--brand);font-weight:700;font-size:24px;margin-right:3px;}
+.asm-hero .why{
+  font-size:13.5px;color:#9C928A;line-height:1.8;margin:20px 0 0;white-space:nowrap;
+}
+@media(max-width:768px){.asm-hero .why{white-space:normal;}}
+.asm-start{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--brand);color:#fff;border:0;border-radius:100px;
+  padding:13px 34px;font-size:15.5px;font-weight:600;cursor:pointer;
+  letter-spacing:.5px;box-shadow:0 4px 14px rgba(224,67,46,.22);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.asm-start:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(224,67,46,.28);}
+
+/* 答题区 */
+.asm-quiz{display:none;}
+.asm-quiz.show{display:block;}
+.asm-progress{margin-bottom:18px;}
+.asm-progress .top{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-size:13px;color:var(--text-2);margin-bottom:8px;letter-spacing:.3px;
+}
+.asm-progress .top b{color:var(--brand);font-size:15px;font-weight:700;}
+.asm-bar{height:5px;background:var(--line-weak);border-radius:100px;overflow:hidden;}
+.asm-bar i{
+  display:block;height:100%;background:var(--brand);border-radius:100px;
+  width:0;transition:width .32s cubic-bezier(.25,1,.5,1);
+}
+.asm-card{
+  background:var(--card);border:1px solid var(--line-weak);border-radius:16px;
+  padding:26px 24px;box-shadow:0 2px 10px rgba(32,25,20,.04);
+}
+.asm-q{font-family:var(--font-hand);font-size:20px;font-weight:700;color:var(--title);line-height:1.6;margin:0 0 20px;}
+.asm-opts{display:flex;flex-direction:column;gap:9px;}
+.asm-opt{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:var(--card);border:1px solid var(--line-weak);border-radius:11px;
+  padding:13px 16px;font-size:14.5px;color:var(--title);cursor:pointer;
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+.asm-opt:hover{border-color:rgba(224,67,46,.35);background:rgba(224,67,46,.04);transform:translateX(2px);}
+.asm-opt.on{border-color:var(--brand);background:rgba(224,67,46,.07);font-weight:600;}
+.asm-opt .n{
+  flex:0 0 auto;width:22px;height:22px;border-radius:50%;
+  background:rgba(224,67,46,.10);color:var(--brand);font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.asm-opt.on .n{background:var(--brand);color:#fff;}
+.asm-nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px;}
+.asm-back{
+  background:none;border:0;color:var(--text-2);font-size:13.5px;cursor:pointer;
+  padding:8px 4px;letter-spacing:.3px;
+}
+.asm-back:hover{color:var(--brand);}
+.asm-back[disabled]{opacity:.35;cursor:default;}
+.asm-hint{font-size:12.5px;color:#9C928A;}
+
+/* ===== 报告页 ===== */
+/* 标题句（如「情绪管理严重不足」读着像病句，已按用户要求去掉）：黑框里只留 kicker + 五维雷达 */
+.rep-hero{
+  background:#241F1B;border-radius:18px;padding:14px 18px 10px;color:#F5EFE7;
+  box-shadow:0 6px 22px rgba(32,25,20,.18);
+}
+.rep-hero .rp-kicker{
+  font-size:13px;letter-spacing:2px;color:rgba(245,239,231,.55);
+  margin:0 0 4px;text-align:center;
+}
+.rep-hero .rp-type{
+  font-family:var(--font-hand);font-size:28px;font-weight:700;color:#FFF9F2;
+  text-align:center;letter-spacing:1.5px;margin:0 0 6px;line-height:1.4;
+}
+.rep-hero svg{display:block;margin:0 auto;max-width:100%;height:auto;}
+
+/* 区块 */
+.rep-sec{margin-top:30px;}
+.rep-sec h2{
+  font-family:var(--font-hand);font-size:19px;font-weight:700;color:var(--title);
+  letter-spacing:.4px;margin:0 0 13px;
+}
+
+/* 等级徽章（按分数五档过渡：优秀绿→良好浅绿→偏弱黄→明显不足橙→严重不足红） */
+.lv{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:100px;white-space:nowrap;flex:0 0 auto;border:1px solid transparent;}
+.lv-1{background:rgba(47,158,99,.12);color:#2F9E63;border-color:rgba(47,158,99,.35);}
+.lv-2{background:rgba(124,168,60,.14);color:#6E9A2E;border-color:rgba(124,168,60,.38);}
+.lv-3{background:rgba(217,147,13,.13);color:#B57A0A;border-color:rgba(217,147,13,.4);}
+.lv-4{background:rgba(224,106,46,.12);color:#D65F24;border-color:rgba(224,106,46,.4);}
+.lv-5{background:rgba(224,67,46,.10);color:var(--brand);border-color:rgba(224,67,46,.42);}
+
+/* 五维分析卡：一行 2~3 个（前三个都是明显不足/严重不足就 3+2，否则 2+3），行内均分 */
+.rep-dims{display:flex;flex-direction:column;gap:12px;}
+.rep-row{display:flex;gap:12px;}
+.rep-row .rep-dim{flex:1 1 0;min-width:0;}
+.rep-dim{
+  background:var(--card);border:1px solid var(--line-weak);border-radius:15px;
+  padding:19px 20px;
+}
+/* 头部一行排布：徽章 + 名称 + 分数强制同一行，分数靠右对齐；窄卡也不许换行 */
+.rep-dim .hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:nowrap;}
+.rep-dim .nm{font-family:var(--font-hand);font-size:16px;font-weight:700;color:var(--title);letter-spacing:.3px;white-space:nowrap;}
+.rep-dim .sc{font-size:12px;color:var(--text-2);margin-left:auto;white-space:nowrap;flex:0 0 auto;}
+.rep-track{height:5px;background:var(--line-weak);border-radius:100px;overflow:hidden;margin-bottom:13px;}
+.rep-track i{display:block;height:100%;background:var(--brand);border-radius:100px;}
+.rep-dim .ana{font-size:14.5px;line-height:1.85;color:var(--title);margin:0;}
+
+/* 操作区：三个按钮居中 */
+.rep-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px;justify-content:center;}
+.rep-btn{
+  background:var(--card);border:1px solid var(--line-weak);border-radius:100px;
+  padding:11px 22px;font-size:14px;color:var(--title);cursor:pointer;
+  transition:border-color .18s ease,color .18s ease;text-decoration:none;display:inline-block;
+}
+.rep-btn:hover{border-color:var(--brand);color:var(--brand);}
+.rep-btn.primary{background:var(--brand);color:#fff;border-color:var(--brand);}
+.rep-btn.primary:hover{opacity:.92;color:#fff;}
+.rep-btn.bridge{background:rgba(224,67,46,.08);border-color:var(--brand);color:var(--brand);font-weight:600;}
+.rep-btn.bridge:hover{background:rgba(224,67,46,.14);color:var(--brand);}
+
+.rep-note{
+  margin-top:24px;padding:14px 16px;border-radius:12px;
+  background:rgba(32,25,20,.035);font-size:12px;color:var(--text-2);line-height:1.75;
+}
+.rep-empty{text-align:center;padding:60px 20px;color:var(--text-2);font-size:14.5px;}
+.rep-empty a{color:var(--brand);font-weight:600;text-decoration:none;}
+
+/* 分享弹层 */
+.share-mask{
+  display:none;position:fixed;inset:0;background:rgba(32,25,20,.55);z-index:99;
+  align-items:center;justify-content:center;padding:20px;
+}
+.share-mask.show{display:flex;}
+.share-pop{
+  background:var(--card);border-radius:16px;padding:16px;max-width:400px;width:100%;
+  max-height:92vh;overflow:auto;
+}
+.share-pop img{display:block;width:100%;height:auto;border-radius:10px;}
+.share-btns{display:flex;gap:8px;margin-top:12px;}
+.share-btns .rep-btn{flex:1;text-align:center;padding:10px 6px;font-size:13px;}
+@media(max-width:768px){
+  .rep-row{flex-direction:column;}
+  .rep-row .rep-dim{flex:1 1 auto;}
+}
+@media(prefers-reduced-motion:reduce){
+  .asm-opt,.asm-start,.rep-btn{transition:none;}
+}
+</style>
+<link rel="stylesheet" href="assets/free-lock.css?v=7">
+</head>
+<body>
+<nav class="site-nav" id="siteNav">
+  <div class="inner">
+    
+    <a class="brand" href="growth-brain.html">
+      <img class="site-icon" src="assets/site-icon.png" alt="成长觉醒" width="32" height="32">
+      <span class="brand-text">
+        <span class="title">成长觉醒</span>
+      </span>
+    </a>
+    <div class="nav-tabs" role="tablist"><a role="tab" class="tab" href="growth-brain.html">第二大脑</a><a role="tab" class="tab active" href="ability-model.html">个人能力模型</a><a role="tab" class="tab" href="all.html">全部思维模型</a><a role="tab" class="tab" href="growth-stages.html">成长之路</a><a role="tab" class="tab" href="book-list.html">成长书单</a></div>
+    <div class="right">
+      
+      <div class="gsearch" data-search="search.html"><form class="gsearch-form" role="search"><div class="gsearch-field"><input class="gsearch-input" type="text" placeholder="请输入搜索关键词" aria-label="搜索思维模型"><button class="gsearch-clear" type="button" aria-label="清空搜索"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><button class="gsearch-btn" type="submit" aria-label="搜索"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button></form></div>
+    </div>
+  </div>
+</nav>
+<script>
+(function(){
+  var tabs = document.querySelector('.nav-tabs');
+  function scrollTabIntoView(tab){
+    if(!tab || !tabs) return;
+    var cw = tabs.clientWidth, sw = tabs.scrollWidth;
+    if(sw <= cw) return;
+    // 让 active tab 出现在容器左侧约 1/4 处，确保前面一个 tab 也能露出来
+    var relLeft = tab.offsetLeft - tabs.offsetLeft;
+    var target = relLeft - cw * 0.25;
+    tabs.scrollTo({left: Math.max(0, Math.min(target, sw - cw)), behavior: 'smooth'});
+  }
+  if(tabs){
+    var active = tabs.querySelector('.tab.active');
+    if(active) setTimeout(function(){ scrollTabIntoView(active); }, 0);
+    tabs.addEventListener('click', function(e){
+      var t = e.target.closest('.tab');
+      if(t) setTimeout(function(){ scrollTabIntoView(t); }, 0);
+    });
+  }
+})();
+</script>
+<div class="asm-wrap">
+
+<div id="repBody"></div>
+
+</div>
+<script>
+(function(){
+  var QS = [{"i": 0, "t": "你经常感到迷茫，不清楚自己想要什么，总是找不到努力的方向", "pain": "迷茫", "dim": "self"}, {"i": 1, "t": "你很容易自卑，总是拿自己和别人作对比，总觉得自己不如别人", "pain": "自卑", "dim": "self"}, {"i": 2, "t": "你习惯否定自己，总是盯着自己的缺点和做错的事", "pain": "习惯性自我否定", "dim": "self"}, {"i": 3, "t": "你很需要别人的认可，总是期待别人对你的肯定", "pain": "自我价值感低", "dim": "self"}, {"i": 4, "t": "你特别害怕失败，担心做错事被人笑话，怕丢脸", "pain": "害怕失败", "dim": "self"}, {"i": 5, "t": "你很容易焦虑，心里总是不踏实，经常感到烦躁", "pain": "焦虑", "dim": "emotion"}, {"i": 6, "t": "你经常胡思乱想，就算只是一件小事，也会反复琢磨", "pain": "精神内耗", "dim": "emotion"}, {"i": 7, "t": "你的情绪起伏很大，常常会因为一点小事就发脾气", "pain": "情绪不稳定", "dim": "emotion"}, {"i": 8, "t": "你的心思比较敏感，常常会为了顾及别人的感受，而委屈自己", "pain": "高敏感", "dim": "emotion"}, {"i": 9, "t": "你缺少自己的主见，做决定时，习惯参考大多数人的做法", "pain": "盲目跟风", "dim": "decision"}, {"i": 10, "t": "你在做选择时，总是特别纠结，很难快速做决定", "pain": "选择困难症", "dim": "decision"}, {"i": 11, "t": "你很容易轻信别人说的话，还因此吃了不少亏", "pain": "经常吃亏上当", "dim": "decision"}, {"i": 12, "t": "你很容易在冲动的情况下做决定，事后又会因为自己的冲动而后悔", "pain": "情绪化决策", "dim": "decision"}, {"i": 13, "t": "就算你手上堆了很多任务，也不愿意提前开始，总是拖到最后期限才动手，甚至会来不及做完", "pain": "拖延", "dim": "exec"}, {"i": 14, "t": "你总是会制定很多计划，但这些计划又很难真正地执行", "pain": "执行力差", "dim": "exec"}, {"i": 15, "t": "你很难长时间集中注意力，做事很容易分心", "pain": "专注力差", "dim": "exec"}, {"i": 16, "t": "你总是给自己找很多事做，一直都很忙，但是却没有成长", "pain": "低效瞎忙", "dim": "exec"}, {"i": 17, "t": "你总是讨好身边的人，不好意思拒绝别人的请求，又害怕发生冲突，习惯迁就别人", "pain": "总是讨好别人", "dim": "relation"}, {"i": 18, "t": "你十分在意别人对你的眼光和看法，别人对你的批评会直接影响你的心态", "pain": "过度在意他人看法", "dim": "relation"}, {"i": 19, "t": "你在社交中经常会感到紧张或恐惧，会主动避开各种社交场合", "pain": "社恐", "dim": "relation"}, {"i": 20, "t": "你总是希望用自己的方式，去改变别人，希望对方能按自己的要求做事", "pain": "总想改变别人", "dim": "relation"}, {"i": 21, "t": "你在沟通过程中，不能准确传达自己的想法，让对方很难理解你", "pain": "沟通能力差", "dim": "relation"}, {"i": 22, "t": "面对别人的无理要求，你也总是习惯忍让，缺少自己的底线", "pain": "没有边界感", "dim": "relation"}];
+  var DIMS = [{"key": "self", "name": "自我认知", "short": "自我认知"}, {"key": "emotion", "name": "情绪管理", "short": "情绪管理"}, {"key": "decision", "name": "思考与决策", "short": "决策力"}, {"key": "exec", "name": "做事与执行", "short": "执行力"}, {"key": "relation", "name": "人际关系", "short": "人际关系"}];
+  var LEVELS = [{"min": 4.2, "max": 5.0, "name": "优秀", "desc": "这项能力是你的优势，基本不用管"}, {"min": 3.4, "max": 4.1, "name": "良好", "desc": "偶有困扰，基本能自我调节"}, {"min": 2.6, "max": 3.3, "name": "偏弱", "desc": "时有内耗，需要持续优化"}, {"min": 1.8, "max": 2.5, "name": "明显不足", "desc": "高频困扰，已经影响生活和行动"}, {"min": 1.0, "max": 1.7, "name": "严重不足", "desc": "核心卡点，需要优先解决"}];
+  var COPY = {"self": {"levels": {"优秀": "你能看清自己的优缺点，清楚自己想要什么，别人的评价很难影响你的判断。你几乎不会自我怀疑，也很少内耗自己，当下的状态非常好。", "良好": "大多数情况下你都能认清自己，也很有自己的想法，但是当你被别人否定或者遇到挫折时，偶尔会怀疑自己。虽然这些不会影响你的日常生活，但偶尔也会让你胡思乱想。", "偏弱": "事情顺利的时候你会认可自己，可一旦受挫就会自我怀疑，还经常拿自己和别人对比，看到别人优秀就习惯性地否定自己。你的问题是缺少自我评价的标准，过多依赖外界对你的评价，所以你很容易被别人影响。", "明显不足": "你很难客观地看待自己，只会放大自己的缺点，忽略自己的长处，经常会感到迷茫。你的问题是不清楚自身真实的价值，这会让你频繁地自我否定，做事没底气。", "严重不足": "你长期处在迷茫和自我否定的状态中，总是觉得自己不够好，特别害怕失败，遇到问题的第一反应就是逃避。你的问题是极其缺少自信心，看不到自己身上的长处，还总是拿自己跟别人对比，过度依赖外界对你的评价。"}}, "emotion": {"levels": {"优秀": "你能很快调整自己的情绪，遇到烦心事也不会一直放在心上，不会因为一点小事就影响自己的心情。你很少内耗，情绪比较稳定，当下的状态非常好。", "良好": "平时你的情绪还算稳定，只有压力很大或者被别人冒犯的时候，才会烦躁。虽然这些不会影响你的日常生活，但偶尔也会让你反复回想当时的场景。", "偏弱": "你很容易焦虑，别人的坏情绪很容易影响到你，导致你的心情忽好忽坏。你的问题是不会主动疏导坏情绪，自己的精力很容易被胡思乱想消耗掉，很难专心做事。", "明显不足": "你经常感到焦虑，遇事习惯往坏处想，还会为了顾及别人委屈自己。你的问题是情绪管控能力偏弱，找不到释放坏情绪的办法，这会持续消耗你的身心，干扰你的判断力和执行力。", "严重不足": "你长期处在焦虑内耗的状态里，一点小事就能让你情绪失控，事情还没开始，就会预想各种糟糕的结果。你的问题是完全无法疏导自己的负面情绪，这会严重影响你的日常生活和发展。"}}, "decision": {"levels": {"优秀": "你能看清一件事情的利弊，不会盲目跟风，做决策也能抓住重点。你很少会纠结，当下的状态非常好。", "良好": "你能合理地评估一件事的利弊，但当选项太多的时候，你会短暂地纠结。虽然这不会影响你的日常生活，但偶尔也会让你多花一些时间做决定。", "偏弱": "你能分析一件事的利弊，但真要下决定的时候，就会顾虑太多，总是拿不定主意。你的问题是没有清晰的判断标准，害怕承担选错的代价，这会让你容易错过很多机会。", "明显不足": "你经常轻易相信别人，很容易被别人带节奏，做选择时也总是反复纠结。你的问题是独立判断能力不足，分辨不出信息的真假，看不到潜在的风险，很容易做出错误选择。", "严重不足": "你做决策缺少自己的想法，很难自己拿主意，容易照搬别人的做法。你的问题是缺少独立思考和风险判断能力，这会让你不断踩坑，很难掌控自己的人生方向。"}}, "exec": {"levels": {"优秀": "你想清楚就会立刻动手，定下的计划大多可以完成，做事能够保持专注。你很少拖延，当下的状态非常好。", "良好": "大部分时候你的执行状态稳定，计划基本都能按时做完，只有状态差或者任务难度很高时，才会出现拖延。虽然这不会影响你的长期积累，但偶尔也会打乱你的做事节奏。", "偏弱": "你擅长制定计划，但是很难坚持执行，状态好的时候，会推进很快，但状态差的时候，就容易拖延。你的问题是没有固定的执行方法，做事全看当下情绪，长期目标很难坚持完成。", "明显不足": "拖延已经成为你的常态，虽然你的想法很多，但都很难真正地执行。你的问题是缺少快速开始任务的决心和方法，做事全凭一时兴起，计划经常落空。", "严重不足": "你的想法很多，但执行力严重不足，属于重度拖延症患者，很难长期坚持做一件事，而且做事很容易分心。你的问题是没有持续做事的习惯，所有的规划都很难落地，很难让自己真正的成长。"}}, "relation": {"levels": {"优秀": "与人相处时，你懂得把握分寸，敢于合理拒绝别人，遇到矛盾也能妥善处理。你非常善于处理人际关系。", "良好": "大部分社交场景你都能正常应对，待人真诚，沟通顺畅，只有面对强势的人或者不合理的请求时，才会下意识地退让。虽然这不会影响你的整体状态，但偶尔也会让你心里憋屈。", "偏弱": "多数社交场合你都能正常应对，但遇到别人提出不合理的要求时，你会不好意思拒绝，习惯迁就对方。你的问题是边界感不足，不懂得维护自身的利益。", "明显不足": "你习惯讨好别人，不敢拒绝，害怕冲突，就算对方越界也只会一味地忍让，社交时容易紧张，沟通时经常会产生误会。你的问题是缺少边界感，社交底气不足，长期处在消耗型的关系里。", "严重不足": "你的社交长期充满压抑和内耗，你会无底线讨好他人，害怕冲突，还会主动回避社交，不懂得守住自己的底线。你的问题是没有建立健康的相处模式，这会持续消耗你的精力，让你很难建立平等的人际关系。"}}};
+  var TOTAL = QS.length;
+  var BRAND = '#E0432E', INK = '#241F1B';
+
+  function param(name){
+    var m = location.search.match(new RegExp('[?&]' + name + '=([^&]*)'));
+    if(m) return decodeURIComponent(m[1]);
+    var h = location.hash.match(new RegExp('[#&]' + name + '=([^&]*)'));
+    return h ? decodeURIComponent(h[1]) : '';
+  }
+  function xesc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function levelOf(sc){
+    for(var i=0;i<LEVELS.length;i++){
+      if(sc >= LEVELS[i].min && sc <= LEVELS[i].max) return LEVELS[i];
+    }
+    return sc < LEVELS[LEVELS.length-1].min ? LEVELS[LEVELS.length-1] : LEVELS[0];
+  }
+  function bandOf(sc){ return sc >= 3.4 ? 'high' : (sc >= 2.6 ? 'mid' : 'low'); }
+  function lvClass(sc){
+    if(sc >= 4.2) return 'lv-1';
+    if(sc >= 3.4) return 'lv-2';
+    if(sc >= 2.6) return 'lv-3';
+    if(sc >= 1.8) return 'lv-4';
+    return 'lv-5';
+  }
+  function tierColor(sc){
+    if(sc >= 4.2) return '#2F9E63';
+    if(sc >= 3.4) return '#6E9A2E';
+    if(sc >= 2.6) return '#D9930D';
+    if(sc >= 1.8) return '#E06A2E';
+    return '#E0432E';
+  }
+
+  function compute(s){
+    var res = [];
+    DIMS.forEach(function(d){
+      var sum = 0, n = 0;
+      QS.forEach(function(q, i){
+        if(q.dim === d.key){ sum += parseInt(s.charAt(i) || '1', 10); n++; }
+      });
+      var avg = n ? sum/n : 0;
+      var raw = Math.round(avg*100)/100;
+      var score = Math.round((6 - avg)*10)/10;
+      if(score < 1) score = 1; if(score > 5) score = 5;
+      var band = bandOf(score);
+      // 文案按「等级词」取（5 档，与 LEVELS 一一对应），取不到就退到「偏弱」
+      var L = (COPY[d.key] && COPY[d.key].levels) || {};
+      var cp = L[levelOf(score).name] || L['偏弱'] || '';
+      res.push({key:d.key, name:d.name, short:d.short, avg:raw, score:score,
+                lv:levelOf(score), band:band, n:n, copy:cp});
+    });
+    return res;
+  }
+
+  // ===== 五维雷达 =====
+  function radarGroup(res, cx, cy, R, grid, lbl, sub){
+    var N = res.length, gridP = '', axes = '', labels = '', pts = [];
+    function ang(i){ return (-90 + i*360/N) * Math.PI/180; }
+    function pt(i, r){ var a = ang(i); return [cx + r*Math.cos(a), cy + r*Math.sin(a)]; }
+    [0.2,0.4,0.6,0.8,1.0].forEach(function(f){
+      var d = '';
+      for(var i=0;i<N;i++){ var p = pt(i, R*f); d += (i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1); }
+      d += 'Z';
+      gridP += '<path d="'+d+'" fill="none" stroke="'+grid+'" stroke-width="1"/>';
+    });
+    for(var i=0;i<N;i++){
+      var p = pt(i, R);
+      axes += '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="'+grid+'" stroke-width="1"/>';
+      var lp = pt(i, R+30), a = ang(i);
+      // 名称与分数一律水平居中（用户要求：不能只有顶部那一个居中，其余 start/end 锚点会错位）
+      var anchor = 'middle';
+      var dy = Math.sin(a) > 0.6 ? 10 : (Math.sin(a) < -0.6 ? -4 : 4);
+      labels += '<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+dy).toFixed(1)+'" text-anchor="'+anchor+'" font-size="13.5" font-weight="600" fill="'+lbl+'" font-family="PingFang SC,Microsoft YaHei,sans-serif">'+xesc(res[i].name)+'</text>';
+      labels += '<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+dy+17).toFixed(1)+'" text-anchor="'+anchor+'" font-size="12" fill="'+sub+'" font-family="PingFang SC,Microsoft YaHei,sans-serif">'+res[i].score.toFixed(1)+'</text>';
+      pts.push(pt(i, R*res[i].score/5));
+    }
+    var poly = '';
+    pts.forEach(function(p,i){ poly += (i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1); });
+    poly += 'Z';
+    var dots = '';
+    pts.forEach(function(p){
+      dots += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.4" fill="'+BRAND+'" stroke="'+INK+'" stroke-width="1.6"/>';
+    });
+    return gridP + axes
+      + '<path d="'+poly+'" fill="rgba(224,67,46,0.26)" stroke="'+BRAND+'" stroke-width="2.4" stroke-linejoin="round"/>'
+      + dots + labels;
+  }
+
+  // ===== SVG → PNG =====
+  function saveSvg(svgStr, w, h, filename){
+    try{
+      var data = new XMLSerializer().serializeToString(
+        new DOMParser().parseFromString(svgStr, 'image/svg+xml').documentElement);
+      var blob = new Blob([data], {type:'image/svg+xml;charset=utf-8'});
+      var url = URL.createObjectURL(blob);
+      var img = new Image();
+      img.onload = function(){
+        var cv = document.createElement('canvas');
+        cv.width = w*2; cv.height = h*2;
+        var ctx = cv.getContext('2d');
+        ctx.drawImage(img, 0, 0, w*2, h*2);
+        URL.revokeObjectURL(url);
+        var a = document.createElement('a');
+        a.href = cv.toDataURL('image/png');
+        a.download = filename;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      };
+      img.onerror = function(){ alert('生成图片失败，可改用截图。'); };
+      img.src = url;
+    }catch(e){ alert('生成图片失败，可改用截图。'); }
+  }
+
+  // ===== 二维码 =====
+  function loadQR(cb){
+    if(window.qrcode) return cb(true);
+    var sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+    sc.onload = function(){ cb(!!window.qrcode); };
+    sc.onerror = function(){ cb(false); };
+    document.head.appendChild(sc);
+  }
+  function qrMarkup(url, x, y, size){
+    if(!window.qrcode) return '';
+    if(!url) return '';
+    try{
+      var qr = window.qrcode(0, 'M');
+      qr.addData(url); qr.make();
+      var n = qr.getModuleCount(), pad = 10, inner = size - pad*2, cell = inner/n;
+      var out = '<rect x="'+x+'" y="'+y+'" width="'+size+'" height="'+size+'" rx="10" fill="#FFF9F2"/>';
+      for(var r=0;r<n;r++){
+        for(var c=0;c<n;c++){
+          if(qr.isDark(r,c)){
+            out += '<rect x="'+(x+pad+c*cell).toFixed(1)+'" y="'+(y+pad+r*cell).toFixed(1)
+                 + '" width="'+cell.toFixed(2)+'" height="'+cell.toFixed(2)+'" fill="'+INK+'"/>';
+          }
+        }
+      }
+      return out;
+    }catch(e){ return ''; }
+  }
+
+  // ===== 报告长图 =====
+  // 结论标题句（如「情绪管理严重不足」）已按用户要求全站去掉——它读着像病句。
+  // 长图的标题由 kicker「个人能力评估报告」承担，下面直接是五维雷达 + 分数条。
+  function reportCard(res, dateStr){
+    var W = 750, H = 1120;
+    var rows = '';
+    res.forEach(function(d, i){
+      var y = 700 + i*56;
+      rows += '<text x="62" y="'+y+'" font-size="18" font-weight="700" fill="#FFF9F2" font-family="PingFang SC,sans-serif">'+xesc(d.name)+'</text>'
+        + '<text x="688" y="'+y+'" text-anchor="end" font-size="16" font-weight="700" fill="'+BRAND+'" font-family="PingFang SC,sans-serif">'+d.score.toFixed(1)+'</text>'
+        + '<rect x="62" y="'+(y+26)+'" width="626" height="4" rx="2" fill="rgba(245,239,231,0.12)"/>'
+        + '<rect x="62" y="'+(y+26)+'" width="'+(626*d.score/5).toFixed(0)+'" height="4" rx="2" fill="'+BRAND+'"/>';
+    });
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">'
+      + '<rect width="'+W+'" height="'+H+'" fill="'+INK+'"/>'
+      + '<text x="'+(W/2)+'" y="66" text-anchor="middle" font-size="14" letter-spacing="3" fill="rgba(245,239,231,0.5)" font-family="PingFang SC,sans-serif">个人能力评估报告</text>'
+      + '<text x="'+(W/2)+'" y="112" text-anchor="middle" font-size="13" fill="rgba(245,239,231,0.45)" font-family="PingFang SC,sans-serif">'+xesc(dateStr)+'</text>'
+      + radarGroup(res, W/2, 386, 120, 'rgba(245,239,231,0.13)', 'rgba(245,239,231,0.88)', BRAND)
+      + rows
+      + '<text x="'+(W/2)+'" y="'+(H-34)+'" text-anchor="middle" font-size="13" fill="rgba(245,239,231,0.4)" font-family="PingFang SC,sans-serif">成长觉醒 · 个人能力评估</text>'
+      + '</svg>';
+  }
+
+  // ===== 分享卡片（带二维码）=====
+  function shareCard(res, quizUrl){
+    var W = 750, H = 980;
+    var QR_X = (W-160)/2, QR_Y = 788, QR_S = 160;
+    // 只有线上（http/https）才有可扫地址。本地打开就【留一个预留位】，不写任何提示文案。
+    var qrPart = quizUrl
+      ? ('<text x="'+(W/2)+'" y="762" text-anchor="middle" font-size="17" font-weight="600" fill="rgba(245,239,231,0.85)" font-family="PingFang SC,sans-serif">扫码测一测，看你的能力雷达长什么样</text>'
+         + qrMarkup(quizUrl, QR_X, QR_Y, QR_S))
+      : ('<rect x="'+QR_X+'" y="'+QR_Y+'" width="'+QR_S+'" height="'+QR_S+'" rx="14" fill="rgba(245,239,231,0.03)" stroke="rgba(245,239,231,0.16)" stroke-width="1.5" stroke-dasharray="7 7"/>');
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">'
+      + '<rect width="'+W+'" height="'+H+'" fill="'+INK+'"/>'
+      + '<text x="'+(W/2)+'" y="78" text-anchor="middle" font-size="14" letter-spacing="3" fill="rgba(245,239,231,0.5)" font-family="PingFang SC,sans-serif">我的能力画像</text>'
+      + radarGroup(res, W/2, 366, 128, 'rgba(245,239,231,0.13)', 'rgba(245,239,231,0.88)', BRAND)
+      + qrPart
+      + '</svg>';
+  }
+
+  function svgToImgSrc(svgStr){
+    var blob = new Blob([svgStr], {type:'image/svg+xml;charset=utf-8'});
+    return URL.createObjectURL(blob);
+  }
+
+  // ===== 渲染 =====
+  var wrapEl = document.getElementById('repBody');
+  function render(s){
+
+  var res = compute(s);
+  var sorted = res.slice().sort(function(a,b){ return a.score - b.score; });   // 短板置顶
+
+  // 记住这次结果：回到「个人能力模型」首页时展示（清缓存或换浏览器才会消失）
+  try{
+    localStorage.setItem('abmLastResult', JSON.stringify({
+      s: s,
+      ts: Date.now(),
+      dims: res.map(function(d){ return {name: d.name, score: d.score, lv: d.lv.name}; })
+    }));
+  }catch(e){}
+
+  // 注：结论式标题（「情绪管理严重不足」这类）已按用户要求全站取消——读着像病句。
+  // 报告页黑框里只放五维雷达；长图/分享卡的标题由 kicker 承担。
+
+  var htmlOut = '';
+  htmlOut += '<div class="rep-hero">'
+    + '<p class="rp-kicker">个人能力评估报告</p>'
+    + '<svg xmlns="http://www.w3.org/2000/svg" width="460" height="370" viewBox="0 0 460 370">'
+    + '<rect width="460" height="370" fill="' + INK + '" rx="18"/>'
+    + radarGroup(res, 230, 186, 112, 'rgba(245,239,231,0.13)', 'rgba(245,239,231,0.88)', BRAND)
+    + '</svg>'
+    + '</div>';
+
+  // 一行 2~3 个：最严重的三个都是「明显不足/严重不足」就 3+2，否则 2+3
+  function dimCard(d){
+    return '<div class="rep-dim">'
+      + '<div class="hd"><span class="lv ' + lvClass(d.score) + '">' + xesc(d.lv.name) + '</span>'
+      + '<span class="nm">' + xesc(d.name) + '</span>'
+      // 只有分数数字着色，斜杠和 / 5.0 保持灰色
+      + '<span class="sc"><span style="color:' + tierColor(d.score) + '">' + d.score.toFixed(1) + '</span> / 5.0</span></div>'
+      + '<div class="rep-track"><i style="width:' + Math.round(d.score/5*100) + '%;background:' + tierColor(d.score) + '"></i></div>'
+      + '<p class="ana">' + xesc(d.copy) + '</p>'
+      + '</div>';
+  }
+  var firstRowCount = (sorted.length >= 3 && sorted.slice(0,3).every(function(d){ return d.band === 'low'; })) ? 3 : 2;
+  var row1 = sorted.slice(0, firstRowCount), row2 = sorted.slice(firstRowCount);
+  htmlOut += '<div class="rep-sec"><h2>五维雷达图分析</h2><div class="rep-dims">';
+  htmlOut += '<div class="rep-row">' + row1.map(dimCard).join('') + '</div>';
+  if(row2.length) htmlOut += '<div class="rep-row">' + row2.map(dimCard).join('') + '</div>';
+  htmlOut += '</div></div>';
+
+  htmlOut += '<div class="rep-actions">'
+    + '<button class="rep-btn primary" id="repSave">保存我的报告</button>'
+    + '<button class="rep-btn" id="repShare">分享我的报告</button>'
+    + '<a class="rep-btn" href="assessment.html">重新测一次</a>'
+    + '</div>';
+
+  htmlOut += '<div class="rep-note">本报告不代表你的真实能力，分数只是为了帮你分析可能潜在的问题。</div>';
+
+  htmlOut += '<div class="share-mask" id="shareMask"><div class="share-pop">'
+    + '<img id="shareImg" alt="分享卡片">'
+    + '<div class="share-btns">'
+    + '<button class="rep-btn primary" id="shareSave">保存分享卡片</button>'
+    + '<button class="rep-btn" id="shareCopy">复制链接</button>'
+    + '<button class="rep-btn" id="shareClose">关闭</button>'
+    + '</div></div></div>';
+
+  wrapEl.innerHTML = htmlOut;
+
+  var dateStr = new Date().toLocaleDateString('zh-CN');
+  document.getElementById('repSave').addEventListener('click', function(){
+    saveSvg(reportCard(res, dateStr), 750, 1120, '我的能力报告.png');
+  });
+  document.getElementById('repShare').addEventListener('click', function(){
+    document.getElementById('shareMask').classList.add('show');
+    // 只有 http(s) 打开才有可扫的线上地址；file:// 本地打开时 origin 为 null，生成出来是废码
+    var quizUrl = /^https?:$/.test(location.protocol)
+      ? (location.origin + location.pathname.replace(/[^/]*$/, '') + 'assessment.html')
+      : '';
+    loadQR(function(ok){
+      if(!ok){
+        var img = document.getElementById('shareImg');
+        if(img && !img.getAttribute('src')) img.outerHTML = '<div style="padding:40px;text-align:center;color:#6A6058;">二维码加载失败（无网络），可先复制链接分享。</div>';
+      }
+      var svgStr = shareCard(res, quizUrl);
+      var img = document.getElementById('shareImg');
+      if(img) img.src = svgToImgSrc(svgStr);
+      var saveBtn = document.getElementById('shareSave');
+      if(saveBtn) saveBtn.addEventListener('click', function(){
+        saveSvg(svgStr, 750, 980, '我的能力分享卡片.png');
+      });
+    });
+  });
+  document.getElementById('shareCopy').addEventListener('click', function(){
+    var url = location.href;
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(url).then(function(){ alert('报告链接已复制，发给朋友即可看到这份报告。'); });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = url; document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta);
+        alert('报告链接已复制。');
+      }
+    }catch(e){ alert('复制失败，请手动复制地址栏链接。'); }
+  });
+  document.getElementById('shareClose').addEventListener('click', function(){
+    document.getElementById('shareMask').classList.remove('show');
+  });
+  var maskEl = document.getElementById('shareMask');
+  if(maskEl) maskEl.addEventListener('click', function(e){
+    if(e.target === maskEl) maskEl.classList.remove('show');
+  });
+  }
+  var s = param('s');
+  if(!s || s.length !== TOTAL || !/^[1-5]+$/.test(s)){
+    wrapEl.innerHTML = '<div class="rep-empty">还没有评估数据。<br><br><a href="assessment.html">先做 23 题能力评估 →</a></div>';
+    return;
+  }
+  render(s);
+})();
+</script>
+<script>
+requestAnimationFrame(function(){
+  requestAnimationFrame(function(){
+    document.documentElement.classList.remove('preload');
+  });
+});
+</script>
+<script src="assets/free-lock.js?v=7"></script>
+</body>
+</html>

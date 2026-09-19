@@ -27,6 +27,7 @@
   --nav-height:64px;
   --side-width:220px;
   --serif:"Noto Serif SC","Songti SC","STSong",serif;  /* 展示衬线，标题对比 */
+  --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;  /* 手写体：能力/成长家族统一真源 */
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
