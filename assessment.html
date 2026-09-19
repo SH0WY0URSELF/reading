@@ -243,10 +243,11 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
   var OPTS = [{"val": 1, "label": "几乎不会出现"}, {"val": 2, "label": "偶尔出现，很快调整"}, {"val": 3, "label": "时不时出现，带来烦恼"}, {"val": 4, "label": "经常出现，消耗精力"}, {"val": 5, "label": "频繁出现，严重影响"}];
   var TOTAL = 23;
   var order = [], cur = 0, ans = new Array(TOTAL);
-  // pressedEl：记录最近一次「真正按下/触摸」实际落在哪个按钮上（touchstart + mousedown 双保险，不依赖 PointerEvent）。
-  // 移动端切题瞬间会把上一题的点击「转发」到下一题同位置按钮，造成「下一题被默认选中」。
-  // 守卫：只有 click 的按钮 == 最近按下的按钮才接受；转发来的点击其按下对象仍是上一题按钮，直接丢弃。
-  var pressedEl = null;
+  // handled：本题是否已响应过一次选择（防 touchend 之后若仍有 click 双触发 choose）。
+  // touchActive：移动端一次触摸后的 700ms 窗口内为真；此期间派发的 click 一律视为「上一题触摸穿透到本题」的
+  // 合成 click 而丢弃。这是从根上消除「下一题默认被选中」这一移动端确定性 bug（点击穿透 / click-through）的兜底层，
+  // 桌面端无触摸，touchActive 永为 false，不受影响。
+  var handled = false, touchActive = false;
 
   function shuffle(a){
     for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
@@ -283,24 +284,33 @@ html.preload,html.preload *{transition:none!important;animation:none!important;}
     backBtn.disabled = (cur===0);
     hintEl.textContent = (cur===0) ? '选一个最符合你真实状况的答案' : '';
     qOpts.innerHTML = '';
-    pressedEl = null;  // 新题渲染后尚未有「按下」动作，任何点击先当作可疑，必须等本题真正按下才接受
-    // 移动端在切题瞬间会把上一题的点击「转发」到新题同位置按钮，导致下一题被默认选中。
-    // 用 touchstart + mousedown 记录「本次真正按下的按钮」，click 时校验按下对象 == 当前按钮，否则丢弃。
+    handled = false;  // 新题：尚未响应过选择
     OPTS.forEach(function(o){
       var b = document.createElement('button');
       b.className = 'asm-opt' + (ans[qi]===o.val ? ' on' : '');
       b.type = 'button';
       b.innerHTML = '<span class="n">'+o.val+'</span><span>'+o.label+'</span>';
-      b.addEventListener('touchstart', function(){ pressedEl = b; }, {passive:true});
-      b.addEventListener('mousedown', function(){ pressedEl = b; });
-      b.addEventListener('click', function(){
-        if(pressedEl !== b) return;  // 拦截转发点击：本次按下/触摸的不是当前按钮，丢弃
-        pressedEl = null;
+      function choose(){
+        if(handled) return;          // 本题已响应过（touchend 已处理 / 防双触发）
+        handled = true;
         ans[qi] = o.val;
         var kids = qOpts.querySelectorAll('.asm-opt');
         for(var m=0;m<kids.length;m++){ kids[m].classList.remove('on'); }
         b.classList.add('on');
         setTimeout(next, 170);
+      }
+      // 移动端：用 touchend 处理选择，并 preventDefault 抑制随后合成的 mousedown/click，
+      // 彻底杜绝「上一题触摸穿透到下一题同位置按钮、造成下一题默认被选中」这一移动端确定性 bug。
+      b.addEventListener('touchend', function(e){
+        e.preventDefault();          // 杀掉穿透 click，使其不会派发到下一题
+        touchActive = true;
+        setTimeout(function(){ touchActive = false; }, 700);
+        choose();
+      }, {passive:false});
+      // 桌面端（无 touch）：走 click。移动端触摸后 700ms 内的合成 click 一律丢弃（穿透兜底）。
+      b.addEventListener('click', function(){
+        if(touchActive) return;      // 移动端：丢弃触摸后合成的穿透 click，不污染下一题
+        choose();
       });
       qOpts.appendChild(b);
     });
