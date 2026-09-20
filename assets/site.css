@@ -285,7 +285,9 @@ h1,h2,h3{font-family:var(--serif);}
 .model .m-head{display:flex;align-items:center;gap:10px;}
 .model .m-ico{flex:0 0 auto;width:18px;height:18px;color:var(--brand);}
 .model .name{font-size:15.5px;font-weight:600;color:var(--title);line-height:1.4;letter-spacing:.2px;transition:color var(--dur) ease;}
-.model .m-val{font-size:13.5px;color:var(--text-2);line-height:1.5;margin-top:2px;}
+.model .m-val{font-size:13.5px;color:var(--text-2);line-height:1.5;margin-top:2px;
+  /* 描述最多 2 行：避免某张 3 行卡把整行撑高，同排其他卡留大片空白显得变形 */
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .model .m-foot{
   margin-top:auto;padding-top:6px;
   display:flex;align-items:center;justify-content:flex-end;
