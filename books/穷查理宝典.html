@@ -1,25 +1,319 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>穷查理宝典 · 成长觉醒</title>
-<link rel="stylesheet" href="../assets/site.css">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《穷查理宝典》· 知识卡片</title>
 <style>
- body{margin:0;background:#FBF6F0;color:#201914;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;}
- .stub-wrap{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;}
- .stub-icon{width:56px;height:56px;border-radius:50%;border:2px solid #E0432E;color:#E0432E;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;margin-bottom:14px;}
- .stub-wrap h1{font-size:22px;margin:0 0 10px;}
- .stub-wrap p{color:#6A6058;line-height:1.7;max-width:420px;margin:0 0 22px;}
- .stub-back{display:inline-block;padding:10px 22px;background:#E0432E;color:#fff;border-radius:999px;text-decoration:none;font-weight:600;}
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .red{color:var(--accent);font-weight:400}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .no-anim .rise{opacity:1;transform:none}
+
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .vt{color:var(--accent)}
+
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:180px}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+  }
 </style>
 </head>
 <body>
-<main class="stub-wrap">
- <div class="stub-icon">锁</div>
- <h1>穷查理宝典</h1>
- <p>该内容仅在「完整版」提供，免费传播站仅开放部分内容。</p>
- <a class="stub-back" href="../growth-brain.html">返回第二大脑</a>
-</main>
+<div class="wrap">
+
+  <header class="hero rise">
+    <h1 style="font-size:60px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《穷查理宝典》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">彼得·考夫曼 编 · 2005</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">查理·芒格的演讲与访谈合集</div>
+    <div class="bigq" style="margin-top:18px">想变聪明，先该避开什么？</div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 现实矛盾</a>
+    <a href="#s3" class="tab">③ 核心观点</a>
+    <a href="#s4" class="tab">④ 核心内容</a>
+    <a href="#s5" class="tab">⑤ 核心价值</a>
+  </nav>
+
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="prose">
+      <p>它并不是芒格自己写的一本书，而是编者把他过去二十年的公开演讲、媒体访谈和一篇传记收在一起编成的合集。所以读起来的感觉不是一个严密的体系，而是同一个人反复在讲同一套想法。</p>
+      <p>那套想法可以概括成几件事：用<b>多元思维模型</b>看问题，别只用自己那门专业的视角；用<b>逆向思维</b>绕开失败，而不是一味追着成功跑；守住<b>能力圈</b>，只在自己真懂的地方下注；以及把<b>终身阅读</b>当作获取普世智慧的基本方式。</p>
+      <p>一句话概括：它讲的是怎么想问题，而不是怎么投资。芒格的身份是投资人，但这本书被反复阅读的原因，是那套思考方式拿到哪儿都能用。</p>
+    </div>
+  </section>
+
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 我们通常想怎么变强</div>
+    <div class="sec-sub">学更深的、更前沿的、别人不会的东西。</div>
+    <div class="prose">
+      <p>想提升自己，常见的方向是往上够：读更难的书、学更新的概念、掌握别人没掌握的方法。这条路没错，但它有个隐含假设——只要懂得够多、够深，就能做出更好的判断。</p>
+      <p>芒格走的是另一条路。他的说法很朴素：<b>我们赚钱，靠的是记住浅显的，而不是掌握深奥的</b>。他从不试图成为非常聪明的人，而是持续地试图别变成蠢货，久而久之，这种人便能获得非常大的优势。</p>
+    </div>
+    <div class="vs old">
+      <div class="col">
+        <span class="tag">往上够</span>
+        <div class="vt">追求更高深的知识</div>
+        <div class="vd">相信差距在"知道得不够多"，于是不断往难处学、往新处追。</div>
+        <div class="ve">后果：懂得越来越多，但常见的低级错误一个没少犯。</div>
+      </div>
+      <div class="col">
+        <span class="tag">往下堵</span>
+        <div class="vt">先把显而易见的蠢事避开</div>
+        <div class="vd">先把会让人摔跤的那几个坑找出来，剩下的路自然好走。问他将来会死在什么地方，他就不去那儿。</div>
+        <div class="ve">关键：避开愚蠢的收益，比追求聪明的收益稳得多，也容易得多。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 作者的核心观点</div>
+    <div class="sec-sub">芒格反复强调的六条。</div>
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>反过来想，总是反过来想。</b>我只想知道将来我会死在什么地方，这样我就不去那儿了。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>手上不能只有一把锤子。</b>只用自己专业的视角看所有问题，看什么都像钉子。要借多个学科的模型。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>守住能力圈。</b>重要的是知道自己不懂什么，而不是显得什么都懂。</p></div>
+      <div class="pt"><div class="n">4</div><p><b>对原因要有浓厚的兴趣。</b>你必须有浓厚的兴趣去弄明白正在发生的事情背后的原因。长期保持这种心态，关注现实的能力才会提高；没有这种心态，即使智商很高也注定会失败。</p></div>
+      <div class="pt"><div class="n">5</div><p><b>和"已逝的伟人"交朋友。</b>如果你确实在生活中与那些有杰出思想的已逝的伟人成为朋友，你会过上更好的生活，得到更好的教育。</p></div>
+      <div class="pt"><div class="n">6</div><p><b>把原因讲给别人听。</b>如果你告诉人们事情的时候总是告诉他们原因，他们就能更深刻地理解，也会更倾向于听从。就算不理解理由，也会更倾向于听。</p></div>
+    </div>
+  </section>
+
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 核心内容</div>
+    <div class="sec-sub">先看五张图速览，再一段段讲清来龙去脉。</div>
+
+    <div class="core-cards">
+      <div class="ccard">
+        <div class="ctitle">多元思维模型</div>
+        <div class="ctag">别只用一把锤子</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="90" cy="60" r="22" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="64" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">问题</text>
+            <circle cx="34" cy="30" r="15" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <text x="34" y="34" font-size="10" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">心理</text>
+            <circle cx="146" cy="30" r="15" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <text x="146" y="34" font-size="10" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">经济</text>
+            <circle cx="34" cy="92" r="15" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <text x="34" y="96" font-size="10" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">历史</text>
+            <circle cx="146" cy="92" r="15" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <text x="146" y="96" font-size="10" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">数学</text>
+            <line x1="48" y1="42" x2="72" y2="54" stroke="#E0432E" stroke-width="2"/>
+            <line x1="132" y1="42" x2="108" y2="54" stroke="#E0432E" stroke-width="2"/>
+            <line x1="48" y1="80" x2="72" y2="66" stroke="#E0432E" stroke-width="2"/>
+            <line x1="132" y1="80" x2="108" y2="66" stroke="#E0432E" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="cdesc">同一个问题，从几个学科一起看，才不容易看歪。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">逆向思维</div>
+        <div class="ctag">先找出会死在哪儿</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="mr" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <rect x="18" y="48" width="40" height="30" rx="3" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="38" y="67" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">想要成功</text>
+            <path d="M62,36 L118,36" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#mr)"/>
+            <text x="90" y="26" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">难</text>
+            <path d="M62,90 L118,90" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#mr)"/>
+            <text x="90" y="112" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">先排除失败 · 容易</text>
+            <rect x="120" y="76" width="42" height="30" rx="3" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="141" y="95" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">不去那儿</text>
+          </svg>
+        </div>
+        <div class="cdesc">追着成功跑很难，绕开已知的坑却是可以做到的。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">能力圈</div>
+        <div class="ctag">知道边界在哪</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="90" cy="60" r="30" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="64" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">真懂的</text>
+            <circle cx="90" cy="60" r="48" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="5 4"/>
+            <text x="90" y="116" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">虚线以外 = 别下注</text>
+          </svg>
+        </div>
+        <div class="cdesc">重要的不是圈多大，是知不知道边界在哪。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">终身阅读</div>
+        <div class="ctag">聪明人没有不读书的</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="22" y="58" width="30" height="34" rx="2" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <rect x="58" y="48" width="30" height="44" rx="2" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <rect x="94" y="38" width="30" height="54" rx="2" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <rect x="130" y="26" width="30" height="66" rx="2" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="108" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">每天一点 · 越积越高</text>
+          </svg>
+        </div>
+        <div class="cdesc">他遇到的聪明人，没有一个不是每天阅读的。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">与伟人交友</div>
+        <div class="ctag">向已逝的思想家请教</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="46" r="20" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <text x="60" y="50" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">你</text>
+            <circle cx="126" cy="46" r="20" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="126" y="50" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">伟人</text>
+            <line x1="80" y1="46" x2="104" y2="46" stroke="#6A6058" stroke-width="2" stroke-dasharray="4 3"/>
+            <rect x="52" y="76" width="84" height="26" rx="3" fill="rgba(224,67,46,.08)" stroke="#E0432E" stroke-width="2"/>
+            <text x="94" y="93" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">读他的书 = 对话</text>
+          </svg>
+        </div>
+        <div class="cdesc">读书就是跟那些杰出的头脑对话，比听课划算。</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:28px">
+      <p><b style="color:var(--accent)">反过来想，路会好走很多。</b>芒格那句被引用最广的话是：我只想知道将来我会死在什么地方，这样我就不去那儿了。这不是抖机灵，而是一种很实用的做法——成功的原因往往说不清，但失败的原因通常很具体、很常见，也更容易绕开。所以与其研究"怎样才会赢"，不如把"怎样一定会输"列清楚，然后坚决不做。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">手里只有一把锤子，看什么都像钉子。</b>只在自己那门专业里受过训练的人，会拿这套模型去套所有问题，结果不是解错了，而是根本没看见别的可能。多元思维模型的意思，就是从心理学、历史、数学、物理这些学科里各借几个可靠的模型，遇到问题时轮流用一遍。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">能力圈的重点是边界，不是大小。</b>知道自己在哪儿会出错，比显得什么都懂重要得多。圈大不大是运气加积累，但能不能诚实地说"这个我不懂"，是可以练的。芒格的做法是在圈内果断、在圈外老实。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">读书是他反复讲的一件事。</b>他是这么说的：我这辈子遇到的聪明人（来自各行各业的聪明人）没有不每天阅读的——没有，一个都没有。他还说过，和"已逝的伟人"交朋友，比只是学几个基本概念好得多。这两句放在一起看，读书在他那儿不是修身养性，而是获取别人已经想明白的东西的一条捷径。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">说事情要带上原因。</b>如果你告诉人们事情的时候总是告诉他们原因，他们就能更深刻地理解你说的话，也会更倾向于听从。就算他们不理解你的理由，也会更倾向于听你的话。这条在带团队、谈合作、甚至跟家里人解释一件事时都成立——加一句"因为什么"，说服力会明显不同。</p>
+    </div>
+  </section>
+
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 对今天的核心价值</div>
+    <div class="sec-sub">最该记住的一句，和它在今天怎么用。</div>
+
+    <div class="quote">
+      <div class="mark">"</div>
+      <blockquote>我这辈子遇到的聪明人（来自各行各业的聪明人）没有不每天阅读的——没有，一个都没有。</blockquote>
+      <div class="ex">芒格自己被孩子们笑话是"一本长了两条腿的书"。这句不是励志口号，是他对自己和巴菲特几十年习惯的直白描述。</div>
+    </div>
+
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>做重大决定前，先列一份"绝对别做"清单。</b>把过去栽过的跟头写下来，每次要下判断就先对一遍。绕开已知错误，比临时想怎么做得更好要稳。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>给自己多配几把锤子。</b>不必成为每个领域的专家，但至少借几个基本模型：复利、临界点、激励、从众。遇到事轮流套一遍，判断会稳很多。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>承认不懂，是一种能力。</b>把"我不懂"说出口，比硬撑着显得懂要划算。尤其在钱、健康、职业这些大事上。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>说事情带上原因。</b>请求别人、说服别人、解释一件事，多加一句"因为什么"，对方接受度会明显不同。</p></div>
+    </div>
+
+    <div class="indent">它也有边界：这是演讲和访谈的合集，内容前后重复，不成体系，读起来需要自己归纳；芒格的语境是美国投资和商業，很多例子离普通人的生活较远；他的某些判断带着强烈的个人色彩，不必照单全收。把它当成一套思考习惯的参考，比当成投资指南合适。</div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  if(!window.IntersectionObserver){ if(tabs[0]){tabs[0].classList.add('active');} }
+  var spy=window.IntersectionObserver? new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]}) : null;
+  if(spy){ sections.forEach(function(s){spy.observe(s);}); }
+</script>
 </body>
 </html>
