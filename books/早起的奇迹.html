@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《早起的奇迹》· 知识卡片</title>
+<style>
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .red{color:var(--accent);font-weight:400}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .no-anim .rise{opacity:1;transform:none}
+
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .vt{color:var(--accent)}
+
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:180px}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero rise">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《早起的奇迹》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">哈尔·埃尔罗德 · 2018</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">原版名 The Miracle Morning</div>
+    <div class="bigq" style="margin-top:18px">早起那一小时，真能改变什么吗？</div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 现实矛盾</a>
+    <a href="#s3" class="tab">③ 核心观点</a>
+    <a href="#s4" class="tab">④ 六件事</a>
+    <a href="#s5" class="tab">⑤ 核心价值</a>
+  </nav>
+
+  <!-- 一、书籍定位 -->
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="prose">
+      <p>他二十岁时是一家市值两亿美元公司的顶尖销售员，后来遭遇严重车祸，被判定大脑受损、可能再也走不了路；二十八岁又赶上金融危机，负债近两百八十七万，陷入抑郁。他把自己从这种状态里拉出来的办法，是从朋友一句"去晨跑"的建议开始的。</p>
+      <p>他把那段经历总结成一套早晨的固定流程，取名叫<b>S.A.V.E.R.S. 人生拯救计划</b>：每天早起一小时，按顺序做心静、自我肯定、内心演练、运动、阅读、书写这六件事。整本书就围绕这套流程展开——为什么是早晨、六件事分别干什么、忙的时候怎么压缩、怎么撑过前三十天。</p>
+      <p>一句话概括：它想证明的是，把早晨这一段原本被浪费掉的时间，换成一套固定的自我投资动作，人生的状态会跟着变。</p>
+    </div>
+    <div class="indent">这套流程有个简化版：如果挤不出一小时，六件事每件压到一分钟，六分钟也能走完一轮。作者专门用一章讲了这个压缩办法。</div>
+  </section>
+
+  <!-- 二、现实矛盾 -->
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 早晨通常是怎么被花掉的</div>
+    <div class="sec-sub">闹钟响了按掉，起来第一件事是摸手机，然后一整天都在赶。</div>
+    <div class="prose">
+      <p>关于早起的好处，多数人不是不知道。真正的问题是：看完熬夜伤身的新闻，当晚照样刷手机；定了一排闹钟，第二天一个不落地全部按掉。知道和做到之间缺的那一段，靠"下更大决心"往往补不上。</p>
+      <p>作者的出发点比这更极端。他不是"想变得更好"，而是已经跌到谷底：身体被判定可能瘫痪，事业清零，还背着巨额债务。这种处境下，"再努力一点"已经没有意义，他需要的是一个每天都能执行的、不需要意志力硬撑的最小动作。</p>
+    </div>
+    <div class="vs old">
+      <div class="col">
+        <span class="tag">常见做法</span>
+        <div class="vt">把早起当成一场意志力比拼</div>
+        <div class="vd">靠多定几个闹钟、反复自我批评、前一天晚上发誓明天一定起来，起来之后却没有任何安排，于是又回到床上。</div>
+        <div class="ve">后果：每天都要重新跟自己打一架，赢一次输一次，撑不了几天就放弃。</div>
+      </div>
+      <div class="col">
+        <span class="tag">作者的做法</span>
+        <div class="vt">给早晨装一套不用现想的流程</div>
+        <div class="vd">起床之后做什么、按什么顺序、每件多久，全部提前定死。早起的意义从"起床"变成了"去做那六件事"。</div>
+        <div class="ve">关键：要对抗的不再是困意，而是"起来之后没事干"这件事本身。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 三、核心观点 -->
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 作者的核心观点</div>
+    <div class="sec-sub">支撑这套流程的五条判断。</div>
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>早晨的状态决定一天的状态。</b>醒来后先做什么，决定你这一天是被别人的安排推着走，还是自己先定好节奏。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>多数人过着"低配版"的人生。</b>作者用"负分还是及格，还是满分"这个分法提醒：只求及格的人，拿到的往往是勉强过得去的人生。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>改变需要程序，不只需要决心。</b>把六件事固定成顺序，起床后不用再想今天该干嘛，执行力才不会每天早上重新清零。</p></div>
+      <div class="pt"><div class="n">4</div><p><b>忙不是放弃的理由。</b>一小时排不开就压成六分钟，流程可以缩，但顺序和动作不省。</p></div>
+      <div class="pt"><div class="n">5</div><p><b>习惯要熬过前三十天。</b>作者专门讲了三十天巩固法，因为新流程在最初几周最容易断。</p></div>
+    </div>
+  </section>
+
+  <!-- 四、六件事 -->
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 早起后要做的六件事</div>
+    <div class="sec-sub">S.A.V.E.R.S. 六个字母，一件事对一个字母，按顺序走。</div>
+
+    <div class="core-cards" style="grid-template-columns:repeat(3,1fr)">
+      <div class="ccard">
+        <div class="ctitle">S · 心静</div>
+        <div class="ctag">先让脑子静下来</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="90" cy="58" r="34" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <circle cx="90" cy="58" r="20" fill="none" stroke="#E0432E" stroke-width="2"/>
+            <circle cx="90" cy="58" r="7" fill="#E0432E"/>
+            <text x="90" y="110" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">冥想 · 深呼吸 · 感恩</text>
+          </svg>
+        </div>
+        <div class="cdesc">醒来先别碰手机，让大脑从混乱回到平静。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">A · 自我肯定</div>
+        <div class="ctag">把想成为的人说出来</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="26" y="34" width="80" height="46" rx="6" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <text x="66" y="62" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">我想成为</text>
+            <text x="66" y="76" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">什么样的人</text>
+            <path d="M112,60 L132,60" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <path d="M132,60 L132,88 L44,88 L44,80" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="90" y="112" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">反复念 · 潜意识跟上</text>
+          </svg>
+        </div>
+        <div class="cdesc">写下一段自我肯定宣言，每天大声念一遍。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">V · 内心演练</div>
+        <div class="ctag">先在脑中过一遍</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="52" cy="58" r="22" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <circle cx="52" cy="58" r="7" fill="#6A6058"/>
+            <path d="M76,58 L96,58" fill="none" stroke="#E0432E" stroke-width="2"/>
+            <path d="M112,40 L112,84" stroke="#E0432E" stroke-width="2"/>
+            <path d="M112,40 L146,52 L112,64 Z" fill="rgba(224,67,46,.20)" stroke="#E0432E" stroke-width="2"/>
+            <text x="112" y="106" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">先看见目标达成的样子</text>
+          </svg>
+        </div>
+        <div class="cdesc">把今天要完成的事、想达成的目标，先在脑子里演一遍。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">E · 运动</div>
+        <div class="ctag">把身体叫醒</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="30" r="9" fill="none" stroke="#E0432E" stroke-width="2"/>
+            <path d="M60,39 L60,66 M60,46 L44,58 M60,46 L78,54 M60,66 L48,88 M60,66 L74,86" fill="none" stroke="#E0432E" stroke-width="2" stroke-linecap="round"/>
+            <rect x="108" y="52" width="52" height="14" rx="3" fill="rgba(224,67,46,.16)" stroke="#E0432E" stroke-width="2"/>
+            <text x="134" y="90" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">10 到 20 分钟</text>
+          </svg>
+        </div>
+        <div class="cdesc">十到二十分钟就够，目的是唤醒身体而不是练出成绩。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">R · 阅读</div>
+        <div class="ctag">每天吸收一点</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <path d="M28,84 Q60,64 90,80 Q120,64 152,84 L152,34 Q120,18 90,34 Q60,18 28,34 Z" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <line x1="90" y1="34" x2="90" y2="80" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="108" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">哪怕每天十页</text>
+          </svg>
+        </div>
+        <div class="cdesc">读一点让自己长进的内容，每天十页也行，积少成多。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">S · 书写</div>
+        <div class="ctag">把想法落到纸上</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="34" y="26" width="76" height="72" rx="4" fill="rgba(224,67,46,.08)" stroke="#E0432E" stroke-width="2"/>
+            <line x1="48" y1="46" x2="96" y2="46" stroke="#6A6058" stroke-width="2"/>
+            <line x1="48" y1="60" x2="96" y2="60" stroke="#6A6058" stroke-width="2"/>
+            <line x1="48" y1="74" x2="80" y2="74" stroke="#6A6058" stroke-width="2"/>
+            <path d="M118,88 L146,60 L138,52 L110,80 Z" fill="rgba(224,67,46,.20)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="112" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">日记 · 洞见 · 感恩</text>
+          </svg>
+        </div>
+        <div class="cdesc">写下想法、洞见和要感谢的事，把飘着的念头固定下来。</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:28px">
+      <p><b style="color:var(--accent)">顺序本身就是设计。</b>六件事不是随便排的：先用几分钟让脑子静下来，再说清楚自己要成为什么样的人，接着在脑中把今天过一遍，然后才动身体、读书、动笔。前面三件负责把方向定下来，后面三件负责往里填东西。如果一上来就运动或者看手机，顺序乱了，后面几步也就跟着敷衍。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">自我肯定不是喊口号给自己听。</b>它要你先把"我想成为什么样的人、要达成什么目标、准备怎么达成"这几句写下来，每天念。作者的理由很直接：你反复对自己说什么，潜意识就会慢慢信什么，行为会跟着往那边靠。所以这一步的重点是写具体，不是写漂亮。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">忙的时候压缩，不是跳过。</b>这套流程有明确的简化版：每件各占一分钟，六分钟也能完整走一轮。作者的判断是，宁可缩水也要保留顺序和动作，因为断掉一天，第二天重新启动的成本比想象中大。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">前三十天是最容易断的阶段。</b>他专门写了三十天巩固法，把这个过程拆成几个阶段：前几天会不舒服，中间开始适应，后面才逐渐变成不用想的事。也就是说，开头几天撑不住是预期内的，不是你不行。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">它真正改的不是起床时间。</b>早起只是入口，六件事才是内容。如果只把闹钟提前一小时，起来之后照样刷手机，那只是少睡了一小时，什么都不会变。</p>
+    </div>
+  </section>
+
+  <!-- 五、对今天的核心价值 -->
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 对今天的核心价值</div>
+    <div class="sec-sub">最该记住的一句，和它在今天怎么用。</div>
+
+    <div class="quote">
+      <div class="mark">"</div>
+      <blockquote>要么躺在床上等待生活的暴击，要么早起创造奇迹。</blockquote>
+      <div class="ex">这句话是全书立场的高度浓缩：早晨那段时间，你是被动地交给闹钟和手机，还是先拿来做一点自己的事。</div>
+    </div>
+
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>先把流程定死，再谈坚持。</b>想清楚起床后第一个动作是什么、顺序怎么排、每件多久。决定一旦提前做完，早上就不用再跟困意谈判。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>时间不够就压缩，别跳过。</b>六分钟版本存在的意义就是让你没有"今天太忙"这个借口。缩水可以，断掉不要。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>头几天难受是正常的。</b>作者把三十天拆成阶段来讲，就是告诉你前几天会不适应。这时候别下结论说自己不适合早起。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>关键不在起得早，在起来之后干什么。</b>只提前闹钟不改变任何事。真正起作用的是那一小时里你具体做了哪几件。</p></div>
+    </div>
+
+    <div class="indent">它也有明显的边界：这是一本励志类的经验之谈，不是科学研究，效果因人而异；它对睡眠时长的态度相当激进，跟主流健康建议冲突，睡眠不够的人别照着压缩。微信读书评分 7.1，豆瓣口碑更低，说明不少读者觉得它偏鸡汤。把它当成一份可以照着试的流程清单，别当成被验证过的方法论。</div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  if(!window.IntersectionObserver){ if(tabs[0]){tabs[0].classList.add('active');} }
+  var spy=window.IntersectionObserver? new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]}) : null;
+  if(spy){ sections.forEach(function(s){spy.observe(s);}); }
+</script>
+</body>
+</html>
