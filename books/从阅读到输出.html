@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《从阅读到输出》· 知识卡片</title>
+<style>
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .red{color:var(--accent);font-weight:400}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .no-anim .rise{opacity:1;transform:none}
+
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .vt{color:var(--accent)}
+
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:180px}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero rise">
+    <h1 style="font-size:60px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《从阅读到输出》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">尼克·哈奇森 · 2026</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">副标题：每天 15 分钟，让读过的书真的有用</div>
+    <div class="bigq" style="margin-top:18px">读过的书，为什么最后都白读了？</div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 现实矛盾</a>
+    <a href="#s3" class="tab">③ 核心观点</a>
+    <a href="#s4" class="tab">④ 核心内容</a>
+    <a href="#s5" class="tab">⑤ 核心价值</a>
+  </nav>
+
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="prose">
+      <p>它要解决的不是"怎么读得更快"，而是"为什么读了没变化"。作者给出的诊断很直接：绝大多数读过的内容，最终都没能为我们带来真实的改变。</p>
+      <p>全书分成三块加一个附录：先讲翻开书之前要做什么，再讲怎么把"阅读—输出"变成长期习惯，然后讲怎么持续输出，最后附了 101 条他自己的读书笔记。</p>
+      <p>一句话概括：它的核心主张只有一条——<b>阅读不是终点，输出才是</b>。而要让输出发生，得从翻开书之前就开始准备。</p>
+    </div>
+    <div class="indent">先说清楚：这本书在豆瓣和微信读书的评分都不高（微信读书 5.9）。它确实有明显的包装痕迹。但它提出的那个问题是对的，而且那句"读了不改变就跟刷视频没区别"，值得单独拎出来听一次。下面把它有用的部分和水分分开讲。</div>
+  </section>
+
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 读书这件事通常是怎么失效的</div>
+    <div class="sec-sub">书读完了，合上，然后什么都不剩。</div>
+    <div class="prose">
+      <p>作者引用过一个数字：将近 50% 的成年人在过去一年里只读完了一本书。更麻烦的是后半句——即使读完了，绝大多数内容也没能带来真实的改变。</p>
+      <p>失效的方式通常有两种。一种是读完就忘，过两周连讲了什么都想不起来；另一种是记得很清楚，甚至能复述观点，但生活纹丝不动。第二种更可惜，因为它看起来像"读懂了"。</p>
+    </div>
+    <div class="vs old">
+      <div class="col">
+        <span class="tag">消遣式阅读</span>
+        <div class="vt">翻开书，从第一页读到最后一页</div>
+        <div class="vd">没有预设目标，读到哪算哪，读完合上，下一个动作是找下一本。</div>
+        <div class="ve">后果：书是穿过了你，不是你穿过了书。读得越多，越像在完成任务。</div>
+      </div>
+      <div class="col">
+        <span class="tag">意图式阅读</span>
+        <div class="vt">先定目标，再带着问题读</div>
+        <div class="vd">翻开之前先写清楚：我想从这本书得到什么，我希望它帮我解决什么。然后只找跟这个问题有关的内容。</div>
+        <div class="ve">关键：目标越具体、投入的情感越多，能被你用上的东西就越多。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 作者的核心观点</div>
+    <div class="sec-sub">把它有用的部分挑出来，一共六条。</div>
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>翻开书之前先确认阅读意图。</b>我希望从这本书中获得什么？我期待它帮我实现什么结果？意图越强烈，书中的内容就越多地得到保留和践行。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>不践行就等于没读。</b>如果不能把读到的有益内容拿去改变生活，那么不管读的书多么伟大，都与刷视频或玩游戏没有区别。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>书要给得出能落地的东西。</b>如果一本书不能提供某些可以付诸实践的内容，不能成为改善生活的行动指南，它就失去了价值。</p></div>
+      <div class="pt"><div class="n">4</div><p><b>靠碎片时间积累，不靠专门腾时间。</b>每天 15 分钟，一年能精读二十来本，比"等有空再读"靠谱得多。</p></div>
+      <div class="pt"><div class="n">5</div><p><b>复利是双向的。</b>它可以成就你，也可以毁灭你。一个人若不断降低标准，最终会陷入深渊难以自拔。</p></div>
+      <div class="pt"><div class="n">6</div><p><b>拉着人一起读。</b>与你相处时间最长的 5 个人的水平平均值代表你的水平。提升平均值最好的办法，就是与朋友共同进步。</p></div>
+    </div>
+  </section>
+
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 核心内容</div>
+    <div class="sec-sub">五个能立刻上手的动作。</div>
+
+    <div class="core-cards">
+      <div class="ccard">
+        <div class="ctitle">意图阅读法</div>
+        <div class="ctag">翻开前先写一句话</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="24" y="24" width="72" height="76" rx="4" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="60" y="52" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">书</text>
+            <path d="M100,62 L124,62" fill="none" stroke="#E0432E" stroke-width="2"/>
+            <rect x="126" y="34" width="40" height="56" rx="3" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="146" y="56" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">我要</text>
+            <text x="146" y="72" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">解决什么</text>
+            <text x="90" y="116" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">顺序：先意图，后阅读</text>
+          </svg>
+        </div>
+        <div class="cdesc">写在封面内页，每次翻开前先确认一遍。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">15 分钟</div>
+        <div class="ctag">用碎片时间，不等整块</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="52" width="26" height="44" rx="2" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <rect x="52" y="46" width="26" height="50" rx="2" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <rect x="84" y="38" width="26" height="58" rx="2" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <rect x="116" y="26" width="26" height="70" rx="2" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <rect x="148" y="10" width="20" height="86" rx="2" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="112" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">每天一点点 · 一年二十本</text>
+          </svg>
+        </div>
+        <div class="cdesc">把刷手机的那 15 分钟换过来就够了。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">践行才算数</div>
+        <div class="ctag">没改变 = 没读过</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="34" cy="60" r="20" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="34" y="64" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">读</text>
+            <path d="M58,60 L86,60" fill="none" stroke="#E0432E" stroke-width="2"/>
+            <circle cx="110" cy="60" r="20" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="110" y="64" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">做</text>
+            <path d="M132,60 L146,60" fill="none" stroke="#E0432E" stroke-width="2"/>
+            <text x="158" y="64" font-size="16" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">变</text>
+            <text x="90" y="108" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">停在中间，等于零</text>
+          </svg>
+        </div>
+        <div class="cdesc">读和做之间断了，读得多伟大都没用。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">输出</div>
+        <div class="ctag">把读到的变成自己的话</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="22" y="30" width="46" height="30" rx="3" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="45" y="50" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">划线</text>
+            <rect x="22" y="70" width="46" height="30" rx="3" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="45" y="90" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">笔记</text>
+            <path d="M72,45 L96,45 M72,85 L96,85" fill="none" stroke="#E0432E" stroke-width="2"/>
+            <rect x="98" y="26" width="60" height="38" rx="3" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="128" y="48" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">讲给别人听</text>
+            <rect x="98" y="66" width="60" height="38" rx="3" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="128" y="88" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">用在工作里</text>
+          </svg>
+        </div>
+        <div class="cdesc">划线只是起点，讲出来和用出去才算完成。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">共读</div>
+        <div class="ctag">拉几个人一起读</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="90" cy="58" r="18" fill="rgba(224,67,46,.14)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="62" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">你</text>
+            <circle cx="34" cy="30" r="13" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <circle cx="146" cy="30" r="13" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <circle cx="30" cy="92" r="13" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <circle cx="150" cy="92" r="13" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <line x1="76" y1="46" x2="46" y2="36" stroke="#E0432E" stroke-width="2"/>
+            <line x1="104" y1="46" x2="134" y2="36" stroke="#E0432E" stroke-width="2"/>
+            <line x1="76" y1="72" x2="42" y2="86" stroke="#E0432E" stroke-width="2"/>
+            <line x1="104" y1="72" x2="138" y2="86" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="116" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">同一个圈子的水平 = 你的水平</text>
+          </svg>
+        </div>
+        <div class="cdesc">给别人买一本书，一起读，比一个人读撑得久。</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:28px">
+      <p><b style="color:var(--accent)">意图阅读法，是这本书真正值钱的部分。</b>做法只有一步：翻开书之前，先花几分钟写清楚"我想从这本书获得什么"。作者建议在纸质书的封面内页、或者电子设备的便笺上写下这句话，让每次开始阅读前都能先确认一遍。他的理由很实在——大脑会优先抓取跟目标相关的信息，你没有目标，它就什么都不会替你留下。而且你越是把个人的需求和情感投进去，越可能在里面发现真正能改变你的东西。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">"不践行就等于没读"，这句话值得被单独记住。</b>他是这么说的：如果不能把读到的有益内容拿去改变生活，那么不管你读的书多么伟大，都与刷视频或玩游戏没有区别。这话听着刺耳，但它把判断标准从"读了多少"换成了"改变了多少"。换成这个标准之后，很多看似勤奋的阅读会立刻现原形。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">挑书的标准也该跟着变。</b>作者给出的判断是：如果一本书不能提供某些可以付诸实践的东西，不能成为改善生活的行动指南，它就失去了价值。这个标准有点功利，但用来筛掉那些纯消遣的畅销书很有效。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">别等"有空的时候"。</b>他的算法很简单：未来一年，如果把早上刷朋友圈和晚上看短视频的 15 分钟换成阅读，可能会在二十多个领域提高综合能力。这办法的好处是不需要专门腾出大块时间，也就不容易因为忙而断掉。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">一个人读容易停，拉着人读会久一点。</b>他的说法是：与你相处时间最长的 5 个人的水平平均值代表你的水平，提升平均值最好的办法就是和朋友共同进步——给朋友买一本书，让彼此都从中获益。这条看着像社交技巧，实际解决的是"坚持不下去"这个最大的问题。</p>
+    </div>
+  </section>
+
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 对今天的核心价值</div>
+    <div class="sec-sub">最该记住的一句，和它在今天怎么用。</div>
+
+    <div class="quote">
+      <div class="mark">"</div>
+      <blockquote>如果不能利用书中的有益内容积极改变生活，那么，不管你读的书多么伟大，都与刷视频或玩游戏没有区别。</blockquote>
+      <div class="ex">这句是全书最狠的一句，也是它唯一真正站得住的主张：把读书的衡量标准，从"读了多少本"换成"改变了多少"。</div>
+    </div>
+
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>翻开书之前，先写一句话。</b>就一句："我想靠它解决什么。"写在封面内页，每次翻开前看一眼。这一步几乎不花时间，但它决定了这本书对你有没有用。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>读完一本书，交出一样东西。</b>一段笔记、一段讲给别人的话、一次实际用上的尝试。交不出来，就是没读完。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>别等整块时间。</b>每天 15 分钟就够。与其计划周末读两小时然后泡汤，不如每天固定十五分钟。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>找一个人一起读。</b>同一本书，两个人读完聊一次。聊的时候你会发现，你以为读懂的地方其实没懂。</p></div>
+    </div>
+
+    <div class="indent">这本书的问题得说清楚：它的评分低不是没原因的。全书真正的干货只有"意图阅读法"一条，其余篇幅靠大量自我营销（反复强调作者靠这套方法做到年入七位数）和常识的重新包装撑起来；末尾那 101 条读书笔记更像凑页数的内容；行文也是典型的美式励志腔调，一句话能说清的事要铺三页。所以正确的读法是：<b>只取它那一条主张，剩下的翻过即可</b>。为它花一整天不值，为它花二十分钟很值。</div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  if(!window.IntersectionObserver){ if(tabs[0]){tabs[0].classList.add('active');} }
+  var spy=window.IntersectionObserver? new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]}) : null;
+  if(spy){ sections.forEach(function(s){spy.observe(s);}); }
+</script>
+</body>
+</html>
