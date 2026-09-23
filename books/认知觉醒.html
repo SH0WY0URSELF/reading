@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《认知觉醒》· 知识卡片</title>
+<style>
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .red{color:var(--accent);font-weight:400}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .no-anim .rise{opacity:1;transform:none}
+
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .vt{color:var(--accent)}
+
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:180px}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero rise">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《认知觉醒》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">周岭 · 2020</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">全称《认知觉醒：开启自我改变的原动力》</div>
+    <div class="bigq" style="margin-top:18px">为什么道理都懂，就是做不到？</div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 现实矛盾</a>
+    <a href="#s3" class="tab">③ 核心观点</a>
+    <a href="#s4" class="tab">④ 核心内容</a>
+    <a href="#s5" class="tab">⑤ 核心价值</a>
+  </nav>
+
+  <!-- 一、书籍定位 -->
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="prose">
+      <p>它要解释的是一件几乎每个人都撞上过的事：我们做事总是急于求成、避难趋易，读了很多书、付出了很多努力，日子却没什么变化。问题不在努力的程度，而在于我们从来没搞清楚自己的大脑是怎么工作的。</p>
+      <p>全书分上下两篇。上篇向内看，讲<b>大脑、潜意识、元认知</b>这三件事，目的是让你看清自己；下篇向外看，讲<b>专注力、学习力、行动力、情绪力</b>，再加上早起、冥想、阅读、写作、跑步这套日常动作，目的是让你能改造自己。</p>
+      <p>一句话概括：它把脑科学、认知科学和心理学讲到普通人能用的程度，让你先弄明白自己为什么会这样，再用对力气。</p>
+    </div>
+  </section>
+
+  <!-- 二、现实矛盾 -->
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 我们到底卡在哪儿</div>
+    <div class="sec-sub">越使劲越困惑，越努力越迷茫，这不是个别人的问题。</div>
+    <div class="prose">
+      <p>作者把自己当年的状态写得挺实在：</p>
+      <div class="indent">想勤奋，却总是敌不过惰性；想努力，却总是陷入低效的状态；想精进，面前却总是弯路不断；读了很多书，都忘了；付出很多努力，都白费了。他们仿佛越使劲越困惑，越努力越迷茫。</div>
+      <p style="margin-top:12px">遇到这种情况，多数人的第一反应是怪自己毅力不够，于是更用力地撑：定更狠的计划、熬更晚的夜、用打鸡血的方式冲一阵。结果往往是撑几天就散，然后更怀疑自己。</p>
+    </div>
+    <div class="vs old">
+      <div class="col">
+        <span class="tag">老办法</span>
+        <div class="vt">把耐心当成毅力来用</div>
+        <div class="vd">以为坚持就是咬牙死磕、靠意志力硬顶，撑不住就认定是自己不够努力，于是加大力度再来一轮。</div>
+        <div class="ve">后果：力气全花在跟自己较劲上，情绪先耗干，事情反而停在原地。</div>
+      </div>
+      <div class="col">
+        <span class="tag">作者的解法</span>
+        <div class="vt">耐心来自看得够不够远</div>
+        <div class="vd">耐心不是毅力带来的结果，而是具有长远目光的结果。知道复利曲线前期很平、学习有平台期，现在慢就不再是失败的信号。</div>
+        <div class="ve">关键：撑住你的不是咬牙，是你知道自己正处在曲线的哪一段。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 三、核心观点 -->
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 作者的核心观点</div>
+    <div class="sec-sub">五条论断，每条都对应一类日常困惑。</div>
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>人有三重大脑。</b>本能脑和情绪脑力气大、反应快，理智脑最有智慧却最弱，所以理智脑的职责是驱动前两者，而不是直接取代它们。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>模糊是困扰之源。</b>人生是一场消除模糊的比赛，谁的模糊越严重，谁就越混沌；具体事情一旦变模糊，边界就会无限扩大，小事也会变得难以解决。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>元认知是人类的终极能力。</b>能主动开启第三视角、持续反观自己的思维和行为，就意味着真正开始觉醒，也就有了快速成长的可能。</p></div>
+      <div class="pt"><div class="n">4</div><p><b>我们常把合理化当成思考。</b>大多数时候我们以为自己在思考，其实都是在对自身的行为和欲望进行合理化。</p></div>
+      <div class="pt"><div class="n">5</div><p><b>能帮你做决策的知识才是你的知识。</b>只有当知识能够帮助你做实际决策的时候，它才是你的知识。</p></div>
+    </div>
+  </section>
+
+  <!-- 四、核心内容 -->
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 核心内容</div>
+    <div class="sec-sub">先看五张图速览，再一段段展开讲清来龙去脉。</div>
+
+    <div class="core-cards">
+      <div class="ccard">
+        <div class="ctitle">三重大脑</div>
+        <div class="ctag">理智脑负责驱动，不负责硬干</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="14" y="62" width="44" height="40" rx="5" fill="rgba(106,96,88,.20)" stroke="#6A6058" stroke-width="2"/>
+            <text x="36" y="87" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">本能脑</text>
+            <rect x="68" y="48" width="44" height="54" rx="5" fill="rgba(106,96,88,.20)" stroke="#6A6058" stroke-width="2"/>
+            <text x="90" y="87" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">情绪脑</text>
+            <rect x="122" y="30" width="44" height="72" rx="5" fill="rgba(224,67,46,.14)" stroke="#E0432E" stroke-width="2"/>
+            <text x="144" y="87" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">理智脑</text>
+            <text x="90" y="20" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">力气小 · 但最有智慧</text>
+          </svg>
+        </div>
+        <div class="cdesc">越靠后出现的脑子力气越小，所以硬碰硬顶不过本能。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">消除模糊</div>
+        <div class="ctag">想清楚，事情就小了一半</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="mf" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <circle cx="42" cy="60" r="10" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <circle cx="42" cy="60" r="20" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="3 3"/>
+            <circle cx="42" cy="60" r="32" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="3 3"/>
+            <text x="42" y="106" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">模糊 · 边界扩大</text>
+            <path d="M86,60 L118,60" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#mf)"/>
+            <rect x="120" y="46" width="26" height="28" rx="3" fill="rgba(224,67,46,.16)" stroke="#E0432E" stroke-width="2"/>
+            <text x="133" y="93" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">清晰 · 变小</text>
+          </svg>
+        </div>
+        <div class="cdesc">事情一旦模糊，边界就无限扩大，小事也显得解决不了。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">元认知</div>
+        <div class="ctag">跳出来，看着自己在想什么</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="90" cy="86" r="18" fill="rgba(106,96,88,.18)" stroke="#6A6058" stroke-width="2"/>
+            <text x="90" y="91" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">正在想</text>
+            <circle cx="90" cy="30" r="16" fill="rgba(224,67,46,.14)" stroke="#E0432E" stroke-width="2"/>
+            <circle cx="90" cy="30" r="5" fill="#E0432E"/>
+            <text x="90" y="62" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">看着自己想</text>
+            <line x1="90" y1="46" x2="90" y2="66" stroke="#E0432E" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        <div class="cdesc">第三视角一旦开启，选择就不再是本能自动接管。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">专注力</div>
+        <div class="ctag">极度专注，再主动休息</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="16" y="46" width="36" height="30" rx="3" fill="rgba(224,67,46,.18)" stroke="#E0432E" stroke-width="2"/>
+            <text x="34" y="96" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">专注</text>
+            <rect x="62" y="46" width="36" height="30" rx="3" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="3 3"/>
+            <text x="80" y="96" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">休息</text>
+            <rect x="108" y="46" width="36" height="30" rx="3" fill="rgba(224,67,46,.18)" stroke="#E0432E" stroke-width="2"/>
+            <text x="126" y="96" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">专注</text>
+            <text x="90" y="24" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">交替进行</text>
+          </svg>
+        </div>
+        <div class="cdesc">事前聚精会神，事后彻底撒手，答案反而容易冒出来。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">人生五件套</div>
+        <div class="ctag">早起·冥想·阅读·写作·跑步</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="90" cy="60" r="14" fill="rgba(224,67,46,.16)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="65" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">成长</text>
+            <circle cx="90" cy="24" r="13" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <text x="90" y="28" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">早起</text>
+            <circle cx="128" cy="48" r="13" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <text x="128" y="52" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">冥想</text>
+            <circle cx="116" cy="94" r="13" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <text x="116" y="98" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">阅读</text>
+            <circle cx="64" cy="94" r="13" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <text x="64" y="98" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">写作</text>
+            <circle cx="52" cy="48" r="13" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <text x="52" y="52" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">跑步</text>
+          </svg>
+        </div>
+        <div class="cdesc">成本最低的一套成长动作，靠每天重复而不是靠冲劲。</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:28px">
+      <p><b style="color:var(--accent)">你顶不过本能，是因为对手太老。</b>人的脑子里有三层：本能脑、情绪脑、理智脑。前两层管生存和情绪，力气大、反应快；理智脑最有智慧，但出现得最晚，力气也最小。所以遇到选择时，理智脑不该想着直接取代本能，而是要驱动它。比如你知道该去跑步，靠"骂自己懒"多半没用，因为情绪脑只想要舒服；真正管用的是把事情拆到不费劲的程度，让它愿意动。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">拖着不做，往往不是因为事情难。</b>人们拖延、纠结、畏惧、害怕的根本原因往往不是事情本身有多难，而是内心的想法变得模糊。一件事在脑子里模模糊糊的时候，它的边界会无限扩大，原本不难的小事也会被想成庞然大物。所以真正有效的动作是把它写清楚：具体要做什么、第一步是什么、做到什么程度算完成。写清楚的那一刻，困难通常就缩回它本来的大小了。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">觉醒这件事，有个可以练的开关。</b>大多数时候我们以为自己在思考，其实都是在对自身的行为和欲望进行合理化。元认知就是对抗这种自动合理化的能力，也就是在要做出选择的时候先停留几秒，让理智脑有机会审视当前的思维。从被动到主动，这是一个转折点，当一个人能主动开启第三视角、持续反观自己的思维和行为时，就意味着他真正开始觉醒了。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">变聪明的办法是先专注、再放手。</b>遇到想不通的问题，先保持极度专注，想不出答案时再把注意力转到另一件毫不相干的事情上。也就是事前聚精会神，让意识极度投入；事后完全忘记，让意识彻底撒手。这样灵感和答案就会大概率地出现。很多人反过来做，一边刷手机一边想问题，结果两边都没占到。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">学了多少，要用得上才算数。</b>只有当知识能够帮助你做实际决策的时候，它才是你的知识。读完一本书、划了很多线，如果生活里的选择没有因此变一点，那它只是从眼前过了一遍。所以判断学习有没有发生，不看记了多少，看下次遇到事的时候，你的选择会不会因此不同。</p>
+    </div>
+  </section>
+
+  <!-- 五、对今天的核心价值 -->
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 对今天的核心价值</div>
+    <div class="sec-sub">最该记住的一句，和它在今天怎么用。</div>
+
+    <div class="quote">
+      <div class="mark">"</div>
+      <blockquote>模糊，正是人生困扰之源。而人生也像是一场消除模糊的比赛，谁的模糊越严重，谁就越混沌；谁的模糊越轻微，谁就越清醒。</blockquote>
+      <div class="ex">这句话是全书的分水岭：前面讲大脑，是为了说明焦虑和拖延从哪来；后面讲专注力、学习力和行动力，都是在做同一件事，也就是把模糊一件件清掉。</div>
+    </div>
+
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>拖着不动的时候，先别怪自己懒。</b>把要做的事写成一行具体的话，写清楚第一步是什么、做到哪算完。多数时候你会发现，难的不是事情，是一直没被写下来的那团模糊。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>想放弃的时候，先看清自己在曲线的哪一段。</b>前期进展慢是复利曲线的常态，不是你不行。所以别用"咬牙坚持"顶，去看长期回报还成不成立，成立就继续做。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>要改掉一个习惯，别跟本能硬碰。</b>理智脑力气小，硬顶赢不了。把动作缩小到不费劲的程度，让情绪脑愿意配合，比下更大的决心有用得多。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>判断学习有没有发生，看决策有没有变。</b>读完、听完、划完线都不算数。下次碰到同类的事，你的选择如果跟以前一样，那这一遍就白学了。</p></div>
+    </div>
+
+    <div class="indent">它当然也有边界：这是一本写给普通人的成长读物，不是心理学教材，它对大脑机制讲得通俗，但论证并不严谨；里面提到的方法也需要你自己拿来试，试过才知道哪个适合你。把它当成一份能立刻上手的行动地图，别当成标准答案。</div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  if(!window.IntersectionObserver){ if(tabs[0]){tabs[0].classList.add('active');} }
+  var spy=window.IntersectionObserver? new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]}) : null;
+  if(spy){ sections.forEach(function(s){spy.observe(s);}); }
+</script>
+</body>
+</html>
