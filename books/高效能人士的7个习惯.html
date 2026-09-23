@@ -1,25 +1,298 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>高效能人士的7个习惯 · 成长觉醒</title>
-<link rel="stylesheet" href="../assets/site.css">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《高效能人士的七个习惯》· 知识卡片</title>
 <style>
- body{margin:0;background:#FBF6F0;color:#201914;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;}
- .stub-wrap{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;}
- .stub-icon{width:56px;height:56px;border-radius:50%;border:2px solid #E0432E;color:#E0432E;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;margin-bottom:14px;}
- .stub-wrap h1{font-size:22px;margin:0 0 10px;}
- .stub-wrap p{color:#6A6058;line-height:1.7;max-width:420px;margin:0 0 22px;}
- .stub-back{display:inline-block;padding:10px 22px;background:#E0432E;color:#fff;border-radius:999px;text-decoration:none;font-weight:600;}
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .red{color:var(--accent);font-weight:400}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .no-anim .rise{opacity:1;transform:none}
+
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .vt{color:var(--accent)}
+
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:180px}
+
+  .habits{margin-top:26px;display:flex;flex-direction:column;gap:10px}
+  .habits .h{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:14px 18px}
+  .habits .h .hn{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:23px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .habits .h .hb{flex:1}
+  .habits .h .ht{font-size:25px;color:var(--ink);line-height:1.3}
+  .habits .h .hd{margin-top:6px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+  }
 </style>
 </head>
 <body>
-<main class="stub-wrap">
- <div class="stub-icon">锁</div>
- <h1>高效能人士的7个习惯</h1>
- <p>该内容仅在「完整版」提供，免费传播站仅开放部分内容。</p>
- <a class="stub-back" href="../growth-brain.html">返回第二大脑</a>
-</main>
+<div class="wrap">
+
+  <header class="hero rise">
+    <h1 style="font-size:56px;font-weight:400;color:var(--ink);letter-spacing:2px;line-height:1.15">《高效能人士的七个习惯》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">史蒂芬·柯维 · 2020</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">30 周年纪念版</div>
+    <div class="bigq" style="margin-top:18px">想改变现状，到底该先改什么？</div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 现实矛盾</a>
+    <a href="#s3" class="tab">③ 核心观点</a>
+    <a href="#s4" class="tab">④ 七个习惯</a>
+    <a href="#s5" class="tab">⑤ 核心价值</a>
+  </nav>
+
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="prose">
+      <p>它要回答的是一件很常见的事：为什么学了一堆时间管理、沟通话术、效率工具，工作和生活还是老样子。作者的答案指向别处——问题不在技巧不够，而在你看事情的那套框架本身。</p>
+      <p>全书用七个习惯串起来，七个习惯又归到三个阶段：先是把自己从依赖变成独立，再是从独立走向互赖，最后靠持续更新维持这套状态。所以那七个习惯不是七条技巧，而是七条关于怎么为人处世的原则。</p>
+      <p>一句话概括：它讲的是品格而不是技巧，主张由内而外地改变，也就是先改自己看世界的方式，再谈影响别人和环境。</p>
+    </div>
+  </section>
+
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 我们通常是怎么改自己的</div>
+    <div class="sec-sub">换一套新技巧，撑一阵子，然后回到原样。</div>
+    <div class="prose">
+      <p>遇到瓶颈，常见的动作是往外找办法：学新的沟通话术、试新的待办工具、改一遍日程表。这些办法短期内确实有用，但换来的变化常常很浅——只想让生活发生相对较小的变化，专注于态度和行为就够了；可实质性的生活变化，还是要靠思维的转换。</p>
+      <p>另一面是很多人习惯把原因推给外面：环境不行、别人不配合、运气不好。推卸责任的说法说得多了，会反过来给自己洗脑，变得更加自怨自艾，怪罪别人和环境。</p>
+    </div>
+    <div class="vs old">
+      <div class="col">
+        <span class="tag">由外而内</span>
+        <div class="vt">改技巧、改态度、等环境变好</div>
+        <div class="vd">认为问题出在方法和外部环境上，于是不断换工具、学话术，或者干脆等人配合。</div>
+        <div class="ve">后果：换了一批技巧，底下的看法没动，效果浮在表面，很快就回到原样。</div>
+      </div>
+      <div class="col">
+        <span class="tag">由内而外</span>
+        <div class="vt">先改自己，再去影响环境</div>
+        <div class="vd">先改变个人行为，让自己变得更充实、更具创造力，然后再去施加影响、改变环境。</div>
+        <div class="ve">关键：谁也无法说服他人改变，因为每个人都守着一扇只能从内开启的改变之门。</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>有个说法很能说明为什么"改看法"这么关键：<b>我们看到的世界并非客观世界本身，而是我们在条件限制之下所看到的世界</b>。你以为看到的事实，其实是经由自己的框架过滤过的。框架不动，看到的东西就不会变。</p>
+    </div>
+  </section>
+
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 作者的核心观点</div>
+    <div class="sec-sub">支撑七个习惯的六条判断。</div>
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>思维定式决定你看到什么。</b>我们看到的世界不是客观世界本身，而是在条件限制之下所看到的世界。要改变现状，先要改变自己对问题的看法。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>积极主动是对自己的人生负责。</b>个人行为取决于自身的抉择，而不是外在的环境，人应该有营造有利外在环境的积极性和责任感。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>别被"社会天气"牵着走。</b>消极被动的人，别人以礼相待就笑脸相迎，反之就摆出自卫姿态，心情好坏全取决于他人的言行。</p></div>
+      <div class="pt"><div class="n">4</div><p><b>成长过程不能跳步。</b>自然的成长过程不容违背、忽略或缩短，那只会让你平添失望和挫败感。</p></div>
+      <div class="pt"><div class="n">5</div><p><b>方向比流汗重要。</b>成功甚至求生的关键并不在于你流了多少血汗，而在于你努力的方向是否正确。</p></div>
+      <div class="pt"><div class="n">6</div><p><b>产出要与产能平衡。</b>急功近利常常会毁掉宝贵的物质资产，保持产出与产能的平衡才能更有效利用资产。</p></div>
+    </div>
+  </section>
+
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 七个习惯怎么排</div>
+    <div class="sec-sub">三个阶段：先独立，再互赖，最后持续更新。</div>
+
+    <div class="core-cards" style="grid-template-columns:repeat(3,1fr)">
+      <div class="ccard">
+        <div class="ctitle">依赖 → 独立</div>
+        <div class="ctag">个人领域的成功</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m1" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <circle cx="36" cy="60" r="20" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="36" y="64" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">依赖</text>
+            <path d="M60,60 L104,60" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m1)"/>
+            <circle cx="128" cy="60" r="24" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="128" y="64" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">独立</text>
+            <text x="82" y="104" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">习惯 1 到 3</text>
+          </svg>
+        </div>
+        <div class="cdesc">先把自己的事扛起来，才有资格谈合作。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">独立 → 互赖</div>
+        <div class="ctag">公众领域的成功</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m2" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <circle cx="34" cy="60" r="20" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <text x="34" y="64" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">独立</text>
+            <path d="M58,60 L98,60" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m2)"/>
+            <circle cx="126" cy="42" r="16" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <circle cx="126" cy="78" r="16" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <text x="126" y="108" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">互赖</text>
+          </svg>
+        </div>
+        <div class="cdesc">两个独立的人合作，产出比各自单干大得多。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">不断更新</div>
+        <div class="ctag">让产能不掉队</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="90" cy="62" r="34" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="5 4"/>
+            <circle cx="90" cy="62" r="20" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="66" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">磨刀</text>
+            <text x="90" y="112" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">产出与产能要平衡</text>
+          </svg>
+        </div>
+        <div class="cdesc">别只顾着产出，把能产出的那个自己维护好。</div>
+      </div>
+    </div>
+
+    <div class="habits">
+      <div class="h"><div class="hn">1</div><div class="hb"><div class="ht">积极主动</div><div class="hd">个人行为取决于自身的抉择，而不是外在环境。把精力放在能影响的事上，别耗在只能抱怨的事上。</div></div></div>
+      <div class="h"><div class="hn">2</div><div class="hb"><div class="ht">以终为始</div><div class="hd">先想清楚终点在哪，再倒推今天做什么。方向错了，流再多汗也只是跑得快。</div></div></div>
+      <div class="h"><div class="hn">3</div><div class="hb"><div class="ht">要事第一</div><div class="hd">重要但不紧急的事最容易被挤掉，比如健康、关系、长期能力。把它们排进日程，而不是有空再说。</div></div></div>
+      <div class="h"><div class="hn">4</div><div class="hb"><div class="ht">双赢思维</div><div class="hd">不是你赢我输，也不是各让一步凑合，而是找到双方都能接受的结果。找不到就干脆不做。</div></div></div>
+      <div class="h"><div class="hn">5</div><div class="hb"><div class="ht">知彼解己</div><div class="hd">先听懂别人，再寻求被人理解。聆听需要耐心、坦诚和理解对方的愿望，比给建议难得多。</div></div></div>
+      <div class="h"><div class="hn">6</div><div class="hb"><div class="ht">统合综效</div><div class="hd">差异不是障碍，是材料。两个人的看法不同，凑出来的第三种办法往往比各自原来的都好。</div></div></div>
+      <div class="h"><div class="hn">7</div><div class="hb"><div class="ht">不断更新</div><div class="hd">在身体、精神、智力、社会情感几个维度上持续给自己充电，维持长期的产出能力。</div></div></div>
+    </div>
+
+    <div class="prose" style="margin-top:28px">
+      <p><b style="color:var(--accent)">顺序不能乱。</b>七个习惯是从"管好自己"排到"跟人合作"的。前三个处理你和自己的关系，先把自己的事扛起来；后面三个处理你和别人的关系。跳过了独立直接谈合作，很容易变成依附或者讨好。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">积极主动是负责，不是打鸡血。</b>它说的是个人行为取决于自身的抉择，而不是外在的环境。消极被动的人会被"社会天气"影响：别人以礼相待就笑脸相迎，反之就摆出自卫姿态，心情好坏全取决于他人的言行。把情绪的开关交出去，就等于让别人替你决定今天过得怎么样。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">方向错了，努力就是浪费。</b>成功甚至求生的关键并不在于你流了多少血汗，而在于你努力的方向是否正确。这也是"以终为始"要解决的问题：先确认终点，再谈速度。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">听懂别人比说服别人难。</b>与配偶、子女、朋友或同事相处一定要学会聆听，这需要情感力量的支撑。聆听需要耐心、坦诚和理解对方的愿望，属于品德的高级范畴；相比之下，用很低的情感投入给出"高高在上"的建议要容易得多。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">别把产能榨干。</b>急功近利常常会毁掉宝贵的物质资产，保持产出与产能的平衡才能更有效地利用资产。人也是这样：只顾着产出不充电，短期看着很拼，长期一定崩。</p>
+    </div>
+  </section>
+
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 对今天的核心价值</div>
+    <div class="sec-sub">最该记住的一句，和它在今天怎么用。</div>
+
+    <div class="quote">
+      <div class="mark">"</div>
+      <blockquote>要改变现状，首先要改变自己；要改变自己，先要改变我们对问题的看法。</blockquote>
+      <div class="ex">这句是全书的枢纽：它解释了为什么换技巧常常没用，也解释了这本书为什么不教话术、而是从思维定式讲起。</div>
+    </div>
+
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>卡住的时候先查框架，别急着换工具。</b>你看到的世界不是客观世界本身，而是过滤之后的版本。框架没动，换再多方法也只是换个姿势原地打转。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>把情绪开关收回来。</b>别人一句话就决定你今天的状态，等于把主动权交出去了。先分清哪些是你能影响的，把力气花在那部分。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>重要但不紧急的事要主动排进日程。</b>健康、关系、长期能力这类事永远不会自己冒出来催你，等它变紧急就晚了。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>先听懂，再开口。</b>急着给建议最省力，也最没用。耐着性子听完，问题往往已经解决一半。</p></div>
+    </div>
+
+    <div class="indent">它也有边界：这是三十多年前的管理学畅销书，行文偏说教，例子带着当时的时代印记；七个习惯彼此有重叠，实际执行时很难全部照做。另外它把"原则"讲得很重，但讲原则容易、落地难，真正难的是日复一日照着做。把它当成一套检查自己的清单，比当成成功学读有用。</div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  if(!window.IntersectionObserver){ if(tabs[0]){tabs[0].classList.add('active');} }
+  var spy=window.IntersectionObserver? new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]}) : null;
+  if(spy){ sections.forEach(function(s){spy.observe(s);}); }
+</script>
 </body>
 </html>
